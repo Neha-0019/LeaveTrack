@@ -22,3 +22,5 @@ The full lifecycle of a leave request follows this path:
 
 ## Continuous Integration (CI)
 The project is structured to run via standard CI pipelines. A robust `pytest` suite in `test_leave_workflow.py` guarantees business rules (like boundary overlaps and token security) do not regress.
+
+
