@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeaveTrack | Enterprise Workplace Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+
+        
+
+
+        :root {
+            /* Design Tokens */
+            --bg-color: #FAF9F6;
+            --card-bg: #FFFFFF;
+            --primary-text: #10151F;
+            --accent: #B8862E;
+            --accent-hover: #A07425;
+            
+            /* Muted Status Colors */
+            --status-pending: #B38642;
+            --status-pending-bg: #F8F3EA;
+            --status-approved: #5B7A5B;
+            --status-approved-bg: #EEF3EE;
+            --status-rejected: #AD5C5C;
+            --status-rejected-bg: #F9EAEA;
+            
+            --text-muted: #6B7280;
+            --border: #E8E5DF;
+            --input-bg: #FFFFFF;
+            
+            /* Spacing */
+            --sp-1: 8px; --sp-2: 16px; --sp-3: 24px; --sp-4: 32px; --sp-5: 40px; --sp-6: 48px;
+            
+            /* Radii */
+            --radius-card: 8px;
+            --radius-input: 6px;
+            --radius-pill: 9999px;
+            
+            --input-height: 40px;
+        }
+
+        /* Authentic Obsidian Dark Theme (Linear/Vercel SaaS Quality) */
+        [data-theme="dark"] {
+            --bg-color: #0B0D12;
+            --card-bg: #141720;
+            --primary-text: #F1F5F9;
+            --accent: #D99B26;
+            --accent-hover: #B8811A;
+            --text-muted: #828B9B;
+            --border: #212635;
+            --input-bg: #0E1017;
+            --status-pending: #F59E0B;
+            --status-pending-bg: rgba(245, 158, 11, 0.12);
+            --status-approved: #10B981;
+            --status-approved-bg: rgba(16, 185, 129, 0.12);
+            --status-rejected: #F43F5E;
+            --status-rejected-bg: rgba(244, 63, 94, 0.12);
+        }
+
+        [data-theme="dark"] .navbar {
+            background: rgba(11, 13, 18, 0.85) !important;
+            border-bottom: 1px solid #212635 !important;
+        }
+        [data-theme="dark"] .card {
+            background: #141720 !important;
+            border: 1px solid #212635 !important;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4) !important;
+        }
+        [data-theme="dark"] input[type="text"], 
+        [data-theme="dark"] input[type="number"], 
+        [data-theme="dark"] input[type="date"], 
+        [data-theme="dark"] input[type="password"], 
+        [data-theme="dark"] select {
+            background: #0E1017 !important;
+            border: 1px solid #282E40 !important;
+            color: #F1F5F9 !important;
+        }
+        [data-theme="dark"] input:focus, 
+        [data-theme="dark"] select:focus {
+            border-color: #D99B26 !important;
+            box-shadow: 0 0 0 3px rgba(217, 155, 38, 0.2) !important;
+        }
+        [data-theme="dark"] th {
+            background: #0E1017 !important;
+            color: #828B9B !important;
+            border-bottom: 1px solid #212635 !important;
+        }
+        [data-theme="dark"] td {
+            border-bottom: 1px solid #212635 !important;
+            color: #F1F5F9 !important;
+        }
+        [data-theme="dark"] tr:hover td {
+            background: rgba(217, 155, 38, 0.05) !important;
+        }
+        [data-theme="dark"] .tracker-row {
+            background: #0E1017 !important;
+        }
+        [data-theme="dark"] select option {
+            background: #141720 !important;
+            color: #F1F5F9 !important;
+        }
+        [data-theme="dark"] .auth-right {
+            background: #0B0D12 !important;
+        }
+        [data-theme="dark"] .auth-card {
+            background: #141720 !important;
+            border-color: #212635 !important;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6) !important;
+        }
+
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: var(--bg-color); color: var(--primary-text); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; font-size: 14px; line-height: 1.5; transition: background-color 0.25s ease, color 0.25s ease; }
+        
+        /* Typography Scale */
+        h1, h2, h3, h4 { font-weight: 600; color: var(--primary-text); margin-bottom: var(--sp-1); letter-spacing: -0.01em; }
+        h1 { font-size: 24px; } /* Page title */
+        h2 { font-size: 18px; } /* Section header */
+        h3 { font-size: 14px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+        p { color: var(--text-muted); line-height: 1.5; font-weight: 400; }
+        
+        /* Tabular nums for all numbers */
+        .tabular-nums, input, table, .kpi-value, .badge, .balance-track-labels { font-variant-numeric: tabular-nums; }
+
+        .container { max-width: 1024px; margin: 0 auto; padding: 0 var(--sp-3); width: 100%; }
+        .grid { display: grid; gap: var(--sp-3); }
+        .grid-2 { grid-template-columns: 1fr 1fr; align-items: start; }
+        @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+        
+        .card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            padding: var(--sp-3); 
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px 0 rgba(0, 0, 0, 0.02); 
+            transition: box-shadow 0.2s ease, transform 0.2s ease; 
+        }
+        .card:hover {
+            box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.06);
+        }
+        .card-header { margin-bottom: var(--sp-3); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: var(--sp-2); }
+        .card-header h2 { margin-bottom: 0; }
+
+        /* Forms & Inputs */
+        .form-group { margin-bottom: var(--sp-3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 500; color: var(--primary-text); margin-bottom: var(--sp-1); }
+        input[type="text"], input[type="number"], input[type="date"], input[type="password"], select {
+            width: 100%; height: var(--input-height); padding: 0 var(--sp-2); background: var(--input-bg);
+            border: 1px solid var(--border); border-radius: var(--radius-input); color: var(--primary-text); font-family: inherit; font-size: 14px; transition: all 0.15s ease;
+        }
+        select option { background: var(--card-bg); color: var(--primary-text); }
+        input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184, 134, 46, 0.15); }
+        ::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        ::-webkit-calendar-picker-indicator:hover { opacity: 0.8; }
+
+        /* Custom Toggle Switch */
+        .toggle-group { display: flex; align-items: center; gap: var(--sp-1); cursor: pointer; }
+        .toggle-switch {
+            position: relative; width: 36px; height: 20px; background: var(--border); border-radius: 20px; transition: 0.2s; border: 1px solid transparent;
+        }
+        .toggle-switch::after { content: ''; position: absolute; top: 1px; left: 1px; width: 16px; height: 16px; background: #fff; border-radius: 50%; transition: 0.2s; border: 1px solid #D1D5DB; }
+        .toggle-input { display: none; }
+        .toggle-input:checked + .toggle-switch { background: var(--accent); border-color: var(--accent); }
+        .toggle-input:checked + .toggle-switch::after { transform: translateX(16px); border-color: transparent; }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-1); height: var(--input-height);
+            padding: 0 var(--sp-2); font-weight: 500; font-size: 14px; border-radius: var(--radius-input); cursor: pointer; transition: all 0.15s ease; border: 1px solid transparent; outline: none; font-family: inherit;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #C69234 0%, #A07425 100%); 
+            color: #fff; 
+            box-shadow: 0 2px 6px rgba(184, 134, 46, 0.25); 
+        }
+        .btn-primary:hover:not(:disabled) { 
+            background: linear-gradient(135deg, #B8862E 0%, #8C641D 100%); 
+            box-shadow: 0 4px 14px rgba(184, 134, 46, 0.4); 
+            transform: translateY(-1px); 
+        }
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+        .btn-outline { background: transparent; border-color: var(--border); color: var(--primary-text); }
+        .btn-outline:hover:not(:disabled) { background: var(--border); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-icon { padding: 0; width: var(--input-height); }
+
+        /* Navbar */
+        .navbar { 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+            background: rgba(255, 255, 255, 0.88); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px); 
+            border-bottom: 1px solid var(--border); 
+            height: 64px; 
+            display: flex; 
+            align-items: center; 
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .nav-brand { display: flex; align-items: center; gap: var(--sp-1); font-weight: 600; font-size: 16px; color: var(--primary-text); }
+        .nav-links { display: flex; gap: var(--sp-3); align-items: center; height: 100%; }
+        .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; display: flex; align-items: center; gap: var(--sp-1); cursor: pointer; height: 64px; border-bottom: 2px solid transparent;}
+        .nav-link:hover { color: var(--primary-text); }
+        .nav-link.active { color: var(--primary-text); border-bottom-color: var(--accent); }
+        .profile-chip { display: flex; align-items: center; gap: var(--sp-1); background: var(--bg-color); padding: 4px 12px 4px 4px; border-radius: var(--radius-pill); border: 1px solid var(--border); font-size: 13px; font-weight: 500; color: var(--primary-text); }
+        .profile-avatar { 
+            width: 26px; 
+            height: 26px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #B8862E 0%, #10151F 100%); 
+            color: #fff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 11px; 
+            font-weight: 700; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+
+        /* Auth Screen */
+        .auth-layout { display: flex; min-height: 100vh; background: var(--bg-color); }
+        .auth-left { flex: 1.2; padding: 60px 60px 60px 110px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color: #fff; position: relative; overflow: hidden;}
+        @media (max-width: 900px) { .auth-left { padding: 40px 24px; } }
+        
+        .auth-feature-list { list-style: none; margin-top: var(--sp-4); display: flex; flex-direction: column; gap: var(--sp-2); }
+        .auth-feature-list li { display: flex; align-items: center; gap: var(--sp-2); font-size: 15px; color: rgba(255,255,255,0.7); }
+        .auth-feature-list li svg { color: var(--accent); width: 20px; height: 20px; }
+
+        .auth-right { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: var(--sp-3); background: var(--bg-color); }
+        .auth-card { width: 100%; max-width: 400px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 36px; box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04); }
+        .auth-link { color: var(--accent); cursor: pointer; font-size: 13px; font-weight: 500; }
+        .auth-link:hover { text-decoration: underline; }
+
+        /* Dashboard specific */
+        .dashboard-container { display: none; padding: var(--sp-5) 0; }
+        
+        /* Redesigned Overview Grid for Focal Point */
+        .kpi-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+        @media (max-width: 900px) { .kpi-grid { grid-template-columns: 1fr; } }
+        
+        .kpi-card { padding: var(--sp-3); display: flex; flex-direction: column; justify-content: center; border-radius: var(--radius-card); border: 1px solid var(--border); }
+        .kpi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-2); }
+        .kpi-value { font-size: 28px; font-weight: 600; line-height: 1; margin-bottom: 4px; color: var(--primary-text); letter-spacing: -0.02em; }
+        .kpi-label { font-size: 13px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Signature Progress Bar inside Balance Card */
+        .balance-focal { grid-column: 1 / 2; }
+        .balance-track-container { margin-top: var(--sp-2); width: 100%; }
+        .balance-track-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; font-weight: 500; }
+        .balance-track { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; display: flex; }
+        .balance-fill { height: 100%; background: linear-gradient(90deg, #B8862E 0%, #F59E0B 100%); border-radius: 4px; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        /* Table Toolbar */
+        .toolbar { display: flex; gap: var(--sp-2); margin-bottom: var(--sp-3); align-items: center; flex-wrap: wrap; }
+        .search-box { position: relative; flex: 1; min-width: 250px; }
+        .search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 16px; height: 16px; pointer-events: none;}
+        .search-box input { padding-left: 36px; background: var(--input-bg); }
+        
+        /* Custom Dropdown */
+        .custom-select { position: relative; width: 160px; height: var(--input-height); }
+        .select-trigger { display: flex; justify-content: space-between; align-items: center; width: 100%; height: 100%; padding: 0 var(--sp-2); background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius-input); color: var(--primary-text); font-size: 14px; cursor: pointer; user-select: none; }
+        .select-trigger:hover { border-color: var(--text-muted); }
+        .select-dropdown { position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-card); z-index: 100; display: none; overflow: hidden; padding: 4px; }
+        .select-dropdown.open { display: block; }
+        .select-option { padding: 8px 12px; font-size: 13px; cursor: pointer; border-radius: 4px; color: var(--primary-text); transition: all 0.1s; font-weight: 500; }
+        .select-option:hover { background: var(--bg-color); }
+        .select-option.selected { color: var(--accent); background: var(--bg-color); }
+
+        /* Table */
+        .table-wrapper { overflow-x: auto; margin: 0 -var(--sp-3); padding: 0 var(--sp-3); }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 12px 16px; font-size: 12px; color: var(--text-muted); font-weight: 500; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; background: var(--bg-color); }
+        td { padding: 16px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--primary-text); }
+        tr:hover td { background: var(--bg-color); }
+        tr:last-child td { border-bottom: none; }
+
+        /* Badges */
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 500; letter-spacing: 0.01em; }
+        .badge-pending { background: var(--status-pending-bg); color: var(--status-pending); border: 1px solid rgba(179,134,66,0.2); }
+        .badge-approved { background: var(--status-approved-bg); color: var(--status-approved); border: 1px solid rgba(91,122,91,0.2); }
+        .badge-rejected { background: var(--status-rejected-bg); color: var(--status-rejected); border: 1px solid rgba(173,92,92,0.2); }
+
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
+        .toast { 
+            padding: 14px 18px; 
+            border-radius: 14px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            min-width: 320px; 
+            max-width: 420px;
+            background: var(--card-bg) !important; 
+            border: 1px solid var(--border) !important;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important; 
+            animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            font-size: 14px; 
+            color: var(--primary-text) !important; 
+            position: relative;
+        }
+
+        [data-theme="dark"] .toast {
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45) !important;
+        }
+
+        .toast.success { 
+            border-left: 4px solid #10B981 !important; 
+        }
+        .toast.success .toast-icon-badge {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(16, 185, 129, 0.12);
+            color: #10B981;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+
+        .toast.error { 
+            border-left: 4px solid #F43F5E !important; 
+        }
+        .toast.error .toast-icon-badge {
+            width: 32px; height: 32px; border-radius: 50%;
+            background: rgba(244, 63, 94, 0.12);
+            color: #F43F5E;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+
+        .toast-title {
+            margin: 0; 
+            font-size: 13px; 
+            font-weight: 700; 
+            color: var(--primary-text) !important;
+        }
+
+        .toast-message {
+            margin: 2px 0 0 0; 
+            font-size: 12px; 
+            color: var(--text-muted) !important; 
+            line-height: 1.4;
+        }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.2); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-btn .spinner { display: inline-block; }
+        .loading-btn .btn-text { display: none; }
+        
+        .manager-only { display: none; }
+
+    
+        /* Tracker / Timeline */
+        .tracker-row { display: none; background: #FAFAFA; border-bottom: 1px solid var(--border); }
+        .tracker-row.expanded { display: table-row; }
+        .tracker-container { padding: var(--sp-3) var(--sp-4); }
+        .timeline { display: flex; align-items: center; justify-content: space-between; position: relative; max-width: 600px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; top: 12px; left: 30px; right: 30px; height: 2px; background: var(--border); z-index: 1; }
+        .timeline-step { display: flex; flex-direction: column; align-items: center; z-index: 2; position: relative; width: 120px; }
+        .timeline-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--card-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; transition: all 0.2s; }
+        .timeline-step.active .timeline-dot { border-color: var(--accent); background: var(--accent); color: white; }
+        .timeline-step.completed .timeline-dot { border-color: var(--status-approved); background: var(--status-approved); color: white; }
+        .timeline-step.rejected .timeline-dot { border-color: var(--status-rejected); background: var(--status-rejected); color: white; }
+        .timeline-label { font-size: 13px; font-weight: 500; color: var(--primary-text); }
+        .timeline-date { font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: 2px; height: 16px; }
+
+        .inline-error { font-size: 12px; color: var(--status-rejected); margin-top: 4px; display: none; }
+        .clickable-row { cursor: pointer; transition: background 0.2s; }
+        .clickable-row:hover { background: var(--bg-color); }
+
+            /* Hide number input spin buttons */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--text-muted);
+            width: 100%;
+        }
+
+        /* Hide native browser password reveal icons */
+        input::-ms-reveal,
+        input::-ms-clear,
+        input::-webkit-contacts-auto-fill-button,
+        input::-webkit-credentials-auto-fill-button {
+            display: none !important;
+        }
+
+        /* Interactive Visual Effects */
+        .page-fade-in {
+            animation: fadeInSection 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInSection {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            position: relative;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 16px; right: 16px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.97) !important;
+        }
+
+        .clickable-row td:first-child {
+            border-left: 3px solid transparent;
+            transition: border-left-color 0.2s ease;
+        }
+        .clickable-row:hover td:first-child {
+            border-left-color: var(--accent);
+        }
+    
+        /* Complete Mobile Responsiveness (Smartphones & Tablets) */
+        @media (max-width: 768px) {
+            .auth-layout { flex-direction: column; min-height: auto; }
+            .auth-left { padding: 40px 20px 24px 20px !important; flex: initial; }
+            .auth-right { padding: 24px 16px; width: 100%; }
+            .auth-card { padding: 24px 20px; max-width: 100%; }
+            
+            .navbar { height: auto; padding: 10px 0; }
+            .nav-content { flex-direction: column; gap: 10px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 8px; height: auto; }
+            .nav-link { height: 38px; font-size: 13px; border-bottom: none; border-radius: 6px; padding: 0 10px; }
+            .nav-link.active { background: var(--bg-color); border-bottom: none; }
+            
+            .kpi-grid { grid-template-columns: 1fr !important; gap: 12px; }
+            .grid-2 { grid-template-columns: 1fr !important; }
+            
+            .container { padding-left: 12px; padding-right: 12px; }
+            .toast-container { right: 16px; left: 16px; bottom: 16px; align-items: center; }
+            .toast { min-width: auto; width: 100%; }
+            
+            /* Responsive Calendar */
+            #calendar_grid > div { min-height: 75px; padding: 4px; }
+        }
+
+    
+        /* Workflow Flowchart Responsiveness */
+        .workflow-flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .workflow-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 120px;
+        }
+        .workflow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+        .arrow-dt { display: inline-block; width: 14px; height: 14px; }
+        .arrow-mb { display: none; width: 14px; height: 14px; }
+
+        @media (max-width: 768px) {
+            .workflow-flow-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .workflow-card {
+                width: 100%;
+            }
+            .workflow-arrow {
+                padding: 4px 0;
+            }
+            .arrow-dt { display: none; }
+            .arrow-mb { display: inline-block; }
+        }
+
+    </style>
+</head>
+<body>
+    <div id="toast_container" class="toast-container"></div>
+
+    <!-- ================= AUTHENTICATION SPLIT SCREEN ================= -->
+    <div id="auth_page" class="auth-layout">
+        <div class="auth-left">
+            <div class="auth-brand" style="display: flex; align-items: center; gap: 14px; margin-bottom: var(--sp-6);">
+                <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, #B8862E 0%, #F59E0B 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(184, 134, 46, 0.35);">
+                    <i data-lucide="compass" style="width: 24px; height: 24px; color: #FFFFFF;"></i>
+                </div>
+                <div>
+                    <h1 style="font-size: 2.1rem; font-weight: 800; color: #FFFFFF; margin: 0; letter-spacing: -0.03em; line-height: 1;">Leave<span style="color: #F59E0B; font-weight: 500;">Track</span></h1>
+                    <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.65); font-weight: 600; margin-top: 4px; display: block;">Tactive Workplace Management</span>
+                </div>
+            </div>
+
+            <p style="font-size: 15px; max-width: 400px; color: rgba(255, 255, 255, 0.85); line-height: 1.6; margin-bottom: 24px;">Manage employee absences, track live balances, and approve time-off requests seamlessly.</p>
+            
+            <ul style="list-style: none; padding: 0; margin: 0 0 32px 0; display: flex; flex-direction: column; gap: 14px;">
+                <li style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
+                    <span style="color: #F59E0B; display: flex;"><i data-lucide="check-circle" style="width: 18px; height: 18px;"></i></span>
+                    Instant Manager Approvals & Audit History
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
+                    <span style="color: #10B981; display: flex;"><i data-lucide="check-circle" style="width: 18px; height: 18px;"></i></span>
+                    Interactive Team Absence Calendar Grid
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: rgba(255, 255, 255, 0.9);">
+                    <span style="color: #60A5FA; display: flex;"><i data-lucide="check-circle" style="width: 18px; height: 18px;"></i></span>
+                    Official Printable HR Leave Slips
+                </li>
+            </ul>
+
+            <div style="font-size: 12px; color: rgba(255, 255, 255, 0.5); display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="shield" style="width: 14px; height: 14px; color: #10B981;"></i> Secured with Role-based Authentication
+            </div>
+        </div>
+        <div class="auth-right">
+            <!-- Login View -->
+            <div id="login_view" class="auth-card">
+                <div style="margin-bottom: var(--sp-4);">
+                    <h2 style="font-size: 1.25rem; font-weight: 700;">Sign In</h2>
+                    <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Enter your credentials to access your workspace</p>
+                </div>
+                <div class="form-group">
+                    <label for="login_id">Employee / Manager ID</label>
+                    <input type="text" id="login_id" placeholder="e.g. EMP002 or MG001" onkeypress="if(event.key === 'Enter') handleLogin()">
+                </div>
+                <div class="form-group">
+                    <label for="login_password">Password</label>
+                    <div style="position: relative; width: 100%;">
+                        <input type="password" id="login_password" placeholder="Enter your password" style="padding-right: 40px;" onkeypress="if(event.key === 'Enter') handleLogin()">
+                        <button type="button" id="btn_toggle_login" onclick="togglePasswordVisibility('login_password', 'btn_toggle_login')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;" title="Show Password">
+                            <i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
+                        </button>
+                    </div>
+                </div>
+                <button id="btn_login" class="btn btn-primary" style="width: 100%; margin-top: var(--sp-1);" onclick="handleLogin()">
+                    <span class="spinner"></span><span class="btn-text">Continue</span>
+                </button>
+                <div style="margin-top: var(--sp-4); font-size: 13px; color: var(--text-muted); text-align: center;">
+                    Don't have an account? <span class="auth-link" onclick="toggleAuthView('register')">Register here</span>
+                </div>
+            </div>
+
+            <!-- Register View -->
+            <div id="register_view" class="auth-card" style="display: none;">
+                <div style="margin-bottom: var(--sp-4);">
+                    <h2 style="font-size: 1.25rem;">Create Account</h2>
+                    <p style="font-size: 13px;">Set up your profile to request access</p>
+                </div>
+                <div class="form-group">
+                    <label for="reg_name">Full Name</label>
+                    <input type="text" id="reg_name" placeholder="e.g. Jane Doe">
+                </div>
+                <div class="form-group">
+                    <label for="reg_role">Role</label>
+                    <select id="reg_role">
+                        <option value="employee">Employee</option>
+                        <option value="manager">Manager</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg_dept">Department</label>
+                    <select id="reg_dept">
+                        <option value="Engineering">Engineering</option>
+                        <option value="Product">Product</option>
+                        <option value="Human Resources">Human Resources</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Sales">Sales</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reg_password">Password</label>
+                    <div style="position: relative; width: 100%;">
+                        <input type="password" id="reg_password" placeholder="e.g. Pass@123" style="padding-right: 40px;">
+                        <button type="button" id="btn_toggle_reg" onclick="togglePasswordVisibility('reg_password', 'btn_toggle_reg')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center; padding: 4px;" title="Show Password">
+                            <i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
+                        </button>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                        Must be at least 6 characters & include a letter, number, and special character (e.g. Pass@123).
+                    </div>
+                </div>
+                <button id="btn_register" class="btn btn-primary" style="width: 100%; margin-top: var(--sp-1);" onclick="handleRegister()">
+                    <span class="spinner"></span><span class="btn-text">Register Account</span>
+                </button>
+                <div style="margin-top: var(--sp-4); font-size: 13px; color: var(--text-muted);">
+                    Already registered? <span class="auth-link" onclick="toggleAuthView('login')">Sign In</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= DASHBOARD ================= -->
+    <div id="dashboard_page" style="display: none;">
+        
+        <nav class="navbar">
+            <div class="container nav-content">
+                <div class="nav-links">
+                    <div class="nav-brand" style="margin-right: var(--sp-4); display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="showSection('overview')">
+                        <div style="width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #B8862E 0%, #F59E0B 100%); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 10px rgba(184, 134, 46, 0.35);">
+                            <i data-lucide="compass" style="width: 18px; height: 18px; color: #FFFFFF;"></i>
+                        </div>
+                        <span style="font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--primary-text); font-family: inherit;">Leave<span style="color: var(--accent); font-weight: 500;">Track</span></span>
+                        <span class="badge" style="font-size: 9px; padding: 2px 6px; background: rgba(184, 134, 46, 0.12); color: var(--accent); border: 1px solid rgba(184, 134, 46, 0.25); border-radius: 4px; letter-spacing: 0.05em; text-transform: uppercase;">HQ</span>
+                    </div>
+                    <a class="nav-link active" id="nav_overview" onclick="showSection('overview')">Overview</a>
+                    <a class="nav-link" id="nav_requests" onclick="showSection('requests')">Requests</a>
+                    <a class="nav-link" id="nav_calendar" onclick="showSection('calendar')">Calendar</a>
+                    <a class="nav-link employee-only" id="nav_tracker" onclick="showSection('tracker')">Tracker</a>
+                    <a class="nav-link manager-only" id="nav_approvals" onclick="showSection('approvals')">Approvals</a>
+                    <a class="nav-link" id="nav_settings" onclick="showSection('settings')">Settings</a>
+                    <a class="nav-link" id="nav_help" onclick="showSection('help')">Help Guide</a>
+                </div>
+                <div class="nav-links" style="display: flex; align-items: center; gap: 12px;">
+                    <button id="theme_toggle_btn" class="btn btn-outline btn-icon" onclick="toggleTheme()" title="Toggle Dark/Light Mode" style="width: 34px; height: 34px; border-radius: 50%; padding: 0;">
+                        <i data-lucide="moon" id="theme_icon" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <div class="profile-chip">
+                        <div class="profile-avatar" id="nav_avatar">U</div>
+                        <span id="nav_user_name" style="padding-right: 4px;">User</span>
+                    </div>
+                    <button class="btn btn-outline" style="height: 32px; padding: 0 12px; font-size: 12px;" onclick="logout()">Sign Out</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container dashboard-container" style="display: block;">
+            
+            
+        <!-- APPROVALS SECTION -->
+        <div id="approvals_section" style="display: none;">
+            <div class="card" style="margin-bottom: var(--sp-6);">
+                                <div id="manager_queue_container" style="display: none; margin-bottom: var(--sp-4);">
+                    <div class="card-header" style="margin-bottom: var(--sp-3); border-bottom: none; padding-bottom: 0;">
+                        <h2 style="color: var(--accent);">Manager Approval Queue</h2>
+                    </div>
+                    <div id="manager_queue_content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="overview_section">
+            <!-- KPI GRID -->
+            <div class="kpi-grid">
+                <!-- Signature Element -->
+                <div class="card kpi-card balance-focal">
+                    <div class="kpi-header" style="margin-bottom: 0;">
+                        <span class="kpi-label">Available Balance</span>
+                    </div>
+                    <div style="display: flex; align-items: baseline; gap: 8px;">
+                        <div class="kpi-value" id="kpi_balance">--</div>
+                        <span style="color: var(--text-muted); font-weight: 500; font-size: 14px;">days</span>
+                    </div>
+                    <div class="balance-track-container">
+                        <div class="balance-track-labels">
+                            <span id="balance_used_label">0 used</span>
+                            <span>20 total</span>
+                        </div>
+                        <div class="balance-track">
+                            <div class="balance-fill" id="balance_fill_bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-header"><span class="kpi-label">Pending</span></div>
+                    <div class="kpi-value" id="kpi_pending">--</div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-header"><span class="kpi-label">Approved</span></div>
+                    <div class="kpi-value" id="kpi_approved">--</div>
+                </div>
+                <div class="card kpi-card">
+                    <div class="kpi-header"><span class="kpi-label">Rejected</span></div>
+                    <div class="kpi-value" id="kpi_rejected">--</div>
+                </div>
+            </div>
+            <!-- MAIN CONTENT GRID -->
+            <div class="grid grid-2" id="main_content_grid" style="margin-bottom: var(--sp-3);">
+                <!-- Employee Info Card -->
+                <div class="card" style="display: flex; flex-direction: column;">
+                    <div class="card-header">
+                        <h2 id="info_card_header">Employee Details</h2>
+                        <span id="badge_role" class="badge" style="background: rgba(255,255,255,0.1);">ROLE</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: var(--sp-3); margin-top: var(--sp-2);">
+                        <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--input-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border);">
+                            <i data-lucide="user" style="width: 24px; height: 24px; color: var(--text-muted);"></i>
+                        </div>
+                        <div>
+                            <h3 id="info_name" style="font-size: 1rem; color: var(--text-main); margin-bottom: 2px;">Name</h3>
+                            <p id="info_id" style="font-size: 13px;">ID: -- &nbsp;&middot;&nbsp; Engineering</p>
+                            <p id="info_email" style="font-size: 12px; color: var(--accent); font-weight: 500; margin-top: 2px;">email@tactive.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Form Card -->
+                <div class="card employee-only">
+                    <div class="card-header" style="margin-bottom: var(--sp-3);">
+                        <h2>Request Leave</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_type">Leave Type</label>
+                        <select id="leave_type" style="margin-bottom: var(--sp-2);">
+                            <option value="Casual Leave">Casual Leave (CL)</option>
+                            <option value="Sick Leave">Sick Leave (SL)</option>
+                            <option value="Earned Leave">Earned Leave (EL)</option>
+                            <option value="Parental Leave">Maternity / Paternity Leave (ML/PL)</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">Reason for absence</label>
+                        <input type="text" id="reason" placeholder="e.g. Annual Vacation">
+                    </div>
+                    <div class="grid grid-2" style="gap: var(--sp-2); margin-bottom: 0;">
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" id="start_date">
+                            <label class="toggle-group" style="margin-top: 8px;">
+                                <input type="checkbox" id="half_day_start" class="toggle-input">
+                                <div class="toggle-switch"></div>
+                                <span style="font-weight: normal; color: var(--text-main);">Half Day</span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" id="end_date">
+                            <label class="toggle-group" style="margin-top: 8px;">
+                                <input type="checkbox" id="half_day_end" class="toggle-input">
+                                <div class="toggle-switch"></div>
+                                <span style="font-weight: normal; color: var(--text-main);">Half Day</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="btn_submit" class="btn btn-primary" style="width: 100%; margin-top: var(--sp-2);" onclick="handleSubmitLeave()">
+                        <span class="spinner"></span><span class="btn-text">Submit Request</span>
+                    </button>
+                </div>
+            </div>
+
+            
+
+            <!-- UPCOMING COMPANY HOLIDAYS CARD (Tactive) -->
+            <div class="card" style="margin-top: var(--sp-4); margin-bottom: var(--sp-4);">
+                <div class="card-header" style="margin-bottom: var(--sp-2);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="calendar" style="width: 20px; height: 20px; color: var(--accent);"></i>
+                        <h2 style="margin: 0;">Upcoming Tactive Holidays (2026)</h2>
+                    </div>
+                    <span class="badge" style="background: var(--status-pending-bg); color: var(--status-pending);">Planning Assistant</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 12px;">
+                    <div style="background: var(--bg-color); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-input); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Independence Day</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Sat, Aug 15, 2026</div>
+                        </div>
+                        <span class="badge badge-approved" style="font-size: 10px;">Long Weekend</span>
+                    </div>
+                    <div style="background: var(--bg-color); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-input); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Gandhi Jayanti</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Fri, Oct 02, 2026</div>
+                        </div>
+                        <span class="badge badge-approved" style="font-size: 10px;">Official Holiday</span>
+                    </div>
+                    <div style="background: var(--bg-color); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-input); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Diwali Festival</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Sun, Nov 08, 2026</div>
+                        </div>
+                        <span class="badge badge-approved" style="font-size: 10px;">Festival</span>
+                    </div>
+                    <div style="background: var(--bg-color); border: 1px solid var(--border); padding: 12px; border-radius: var(--radius-input); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px;">Christmas Day</div>
+                            <div style="font-size: 11px; color: var(--text-muted);">Fri, Dec 25, 2026</div>
+                        </div>
+                        <span class="badge badge-approved" style="font-size: 10px;">Long Weekend</span>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+<!-- SETTINGS SECTION -->
+            
+        <!-- REQUESTS SECTION -->
+        <div id="requests_section" style="display: none;">
+            <!-- TABLE SECTION -->
+            <div id="leaves_section" class="card" style="margin-bottom: var(--sp-6);">
+                <div class="card-header" style="margin-bottom: var(--sp-3);">
+                    <h2>Recent Requests</h2>
+                </div>
+                
+                <div class="toolbar">
+                    <div class="search-box">
+                        <i data-lucide="search"></i>
+                        <input type="text" id="search_input" placeholder="Search by reason or ID..." onkeyup="filterTable()">
+                    </div>
+                    
+                    <!-- Custom Status Select -->
+                    <div class="custom-select" id="status_dropdown_container">
+                        <div class="select-trigger" onclick="toggleDropdown()">
+                            <span id="selected_status_text">All Statuses</span>
+                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="select-dropdown" id="status_dropdown_options">
+                            <div class="select-option selected" onclick="selectStatus('ALL', 'All Statuses')">All Statuses</div>
+                            <div class="select-option" onclick="selectStatus('PENDING', 'Pending')">Pending</div>
+                            <div class="select-option" onclick="selectStatus('APPROVED', 'Approved')">Approved</div>
+                            <div class="select-option" onclick="selectStatus('REJECTED', 'Rejected')">Rejected</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="status_filter" value="ALL">
+
+                    <!-- Custom Department Select (Feature 5) -->
+                    <div class="custom-select" id="dept_dropdown_container">
+                        <div class="select-trigger" onclick="toggleDeptDropdown()">
+                            <span id="selected_dept_text">All Departments</span>
+                            <i data-lucide="chevron-down" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="select-dropdown" id="dept_dropdown_options">
+                            <div class="select-option selected" onclick="selectDept('ALL', 'All Departments')">All Departments</div>
+                            <div class="select-option" onclick="selectDept('Engineering', 'Engineering')">Engineering</div>
+                            <div class="select-option" onclick="selectDept('Product', 'Product')">Product</div>
+                            <div class="select-option" onclick="selectDept('Human Resources', 'Human Resources')">Human Resources</div>
+                            <div class="select-option" onclick="selectDept('Marketing', 'Marketing')">Marketing</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="dept_filter" value="ALL">
+
+                    <button class="btn btn-outline btn-icon" onclick="loadDashboardData()" title="Refresh"><i data-lucide="rotate-cw" style="width: 16px; height: 16px;"></i></button>
+                </div>
+
+                
+                <div class="table-wrapper">
+                    <table id="requests_table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Employee</th>
+                                <th>Duration</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Slip</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody id="table_body">
+                            <!-- JS Injected -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+                        <!-- CALENDAR SECTION (Feature 2) -->
+        <div id="calendar_section" style="display: none;">
+            <div class="card" style="margin-bottom: var(--sp-6);">
+                <div class="card-header" style="margin-bottom: var(--sp-3); flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2>Team Absence Calendar</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Visual monthly view of scheduled team leaves for staffing planning.</p>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+                        <!-- Legend -->
+                        <div style="display: flex; align-items: center; gap: 12px; font-size: 12px;">
+                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10B981;"></span> Approved</span>
+                            <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F59E0B;"></span> Pending</span>
+                        </div>
+                        
+                        <!-- Month Nav Controls -->
+                        <div style="display: flex; align-items: center; background: var(--bg-color); border: 1px solid var(--border); border-radius: var(--radius-input); padding: 2px;">
+                            <button class="btn btn-outline" style="height: 28px; padding: 0 8px; border: none; font-size: 12px;" onclick="changeCalendarMonth(-1)"><i data-lucide="chevron-left" style="width: 14px; height: 14px;"></i></button>
+                            <span id="calendar_month_label" style="font-weight: 600; font-size: 13px; padding: 0 12px; color: var(--primary-text);">August 2026</span>
+                            <button class="btn btn-outline" style="height: 28px; padding: 0 8px; border: none; font-size: 12px;" onclick="changeCalendarMonth(1)"><i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="calendar_grid_container">
+                    <!-- Rendered via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TRACKER SECTION -->
+        <div id="tracker_section" style="display: none;">
+            <div class="card" style="margin-bottom: var(--sp-6);">
+                <div class="card-header" style="margin-bottom: var(--sp-3);">
+                    <div>
+                        <h2>Leave Application & Decision Tracker</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Track when your requests were submitted, reviewed by manager, and finalized with full audit timestamps.</p>
+                    </div>
+                </div>
+                <div id="tracker_content_list">
+                    <!-- Rendered via JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- HELP GUIDE SECTION -->
+        <div id="help_section" class="dashboard-section" style="display: none;">
+            <div class="card" style="margin-bottom: var(--sp-6);">
+                <div class="card-header" style="margin-bottom: var(--sp-4); flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2>User Guide & Step-by-Step Instructions</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Comprehensive manual explaining how to navigate, submit requests, approve applications, and print slips in LeaveTrack.</p>
+                    </div>
+                    <span class="badge" style="background: rgba(184, 134, 46, 0.1); color: var(--accent); border: 1px solid rgba(184, 134, 46, 0.25); font-size: 11px; padding: 4px 10px;">Official User Guide</span>
+                </div>
+
+                <!-- How to Use LeaveTrack - 5-Step Workflow Ribbon -->
+                <div style="background: linear-gradient(135deg, rgba(184, 134, 46, 0.08) 0%, rgba(245, 158, 11, 0.04) 100%); border: 1px solid rgba(184, 134, 46, 0.2); border-radius: 14px; padding: 20px; margin-bottom: 24px;">
+                    <div style="font-weight: 700; font-size: 15px; color: var(--primary-text); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="compass" style="width: 20px; height: 20px; color: var(--accent);"></i> How to Use LeaveTrack — 5-Step Core Workflow
+                    </div>
+                    
+                    <div class="workflow-flow-container">
+                        <div class="workflow-card">
+                            <span style="font-weight: 800; font-size: 14px; color: var(--accent);">01</span>
+                            <div><div style="font-weight: 600; font-size: 12px; color: var(--primary-text);">Sign In</div><div style="font-size: 10px; color: var(--text-muted);">EMP002 / MG001</div></div>
+                        </div>
+                        <div class="workflow-arrow"><i data-lucide="arrow-right" class="arrow-dt"></i><i data-lucide="arrow-down" class="arrow-mb"></i></div>
+                        
+                        <div class="workflow-card">
+                            <span style="font-weight: 800; font-size: 14px; color: #10B981;">02</span>
+                            <div><div style="font-weight: 600; font-size: 12px; color: var(--primary-text);">Request Leave</div><div style="font-size: 10px; color: var(--text-muted);">Dates & Reason</div></div>
+                        </div>
+                        <div class="workflow-arrow"><i data-lucide="arrow-right" class="arrow-dt"></i><i data-lucide="arrow-down" class="arrow-mb"></i></div>
+
+                        <div class="workflow-card">
+                            <span style="font-weight: 800; font-size: 14px; color: #3B82F6;">03</span>
+                            <div><div style="font-weight: 600; font-size: 12px; color: var(--primary-text);">Live Tracker</div><div style="font-size: 10px; color: var(--text-muted);">Audit Timeline</div></div>
+                        </div>
+                        <div class="workflow-arrow"><i data-lucide="arrow-right" class="arrow-dt"></i><i data-lucide="arrow-down" class="arrow-mb"></i></div>
+
+                        <div class="workflow-card">
+                            <span style="font-weight: 800; font-size: 14px; color: #A855F7;">04</span>
+                            <div><div style="font-weight: 600; font-size: 12px; color: var(--primary-text);">Manager Review</div><div style="font-size: 10px; color: var(--text-muted);">Approve & Confetti</div></div>
+                        </div>
+                        <div class="workflow-arrow"><i data-lucide="arrow-right" class="arrow-dt"></i><i data-lucide="arrow-down" class="arrow-mb"></i></div>
+
+                        <div class="workflow-card">
+                            <span style="font-weight: 800; font-size: 14px; color: #EC4899;">05</span>
+                            <div><div style="font-weight: 600; font-size: 12px; color: var(--primary-text);">Print HR Slip</div><div style="font-size: 10px; color: var(--text-muted);">Export PDF Doc</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Test Credentials Box -->
+                <div style="background: var(--bg-color); border-left: 4px solid var(--accent); border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 24px;">
+                    <div style="font-weight: 700; font-size: 13px; color: var(--primary-text); display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="key" style="width: 16px; height: 16px; color: var(--accent);"></i> Create Your Accounts & Password Rules
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.6;">
+                        &bull; <strong>First Manager Created:</strong> Auto-assigned ID <code>MG001</code><br>
+                        &bull; <strong>First Employee Created:</strong> Auto-assigned ID <code>EMP002</code><br>
+                        &bull; <strong>Password Requirement:</strong> Minimum 6 characters including a letter, number, and special character (e.g. <code>Admin@123</code>).
+                    </div>
+                </div>
+
+                <!-- Instructions Accordion / Grid -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                    
+                    <!-- Instruction 1 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(184, 134, 46, 0.15); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">1</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Sign In & Role Mismatch Protection</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Select your role: <strong>Employee</strong> or <strong>Manager</strong>.</li>
+                                <li>Enter your ID code: Employee IDs start with <code>EMP</code>, Manager IDs start with <code>MG</code>.</li>
+                                <li>Enter your password (click the <strong>eye icon</strong> to toggle visibility).</li>
+                                <li>If you try to log in with an Employee ID on the Manager tab, LeaveTrack will automatically alert you to switch tabs!</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Instruction 2 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #10B981; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">2</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Submitting a Leave Request</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Click the <strong>Overview</strong> tab in the navigation header.</li>
+                                <li>Choose your <strong>Leave Category</strong>: <code>Casual (CL)</code>, <code>Sick (SL)</code>, <code>Earned (EL)</code>, or <code>Parental</code>.</li>
+                                <li>Select Start Date and End Date.</li>
+                                <li>Toggle <strong>Half Day</strong> switches if taking partial morning/afternoon leave.</li>
+                                <li>Type a clear reason for your absence and click <strong>Submit Request</strong>.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Instruction 3 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(59, 130, 246, 0.15); color: #3B82F6; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">3</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Tracking Application Audit Timeline</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Click the <strong>Tracker</strong> tab in the navigation header.</li>
+                                <li>Inspect your active requests with color-coded side borders:
+                                    <br>&bull; <span style="color:#10B981; font-weight:600;">Green Border</span> = Approved
+                                    <br>&bull; <span style="color:#F43F5E; font-weight:600;">Red Border</span> = Rejected
+                                    <br>&bull; <span style="color:#F59E0B; font-weight:600;">Gold Border</span> = Pending Manager Review
+                                </li>
+                                <li>Follow the connected line between <code>1. Applied Time</code>, <code>2. Manager Review</code>, and <code>3. Final Decision</code>.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Instruction 4 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(168, 85, 247, 0.15); color: #A855F7; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">4</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Manager Approvals (For Managers)</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Sign in as Manager (`MG001`).</li>
+                                <li>Click the <strong>Approvals</strong> tab in the navigation header.</li>
+                                <li>Review the pending queue: inspect applicant's department, current remaining balance, and stated absence reason.</li>
+                                <li>Click <strong>Approve</strong> (triggers a festive confetti burst!) or <strong>Reject</strong>.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Instruction 5 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(236, 72, 153, 0.15); color: #EC4899; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">5</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Printable HR Approval Slips</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Open the <strong>Tracker</strong> tab (or main <strong>Requests</strong> table).</li>
+                                <li>Find any approved leave application and click <strong>Print Slip</strong>.</li>
+                                <li>An official document pops up with reference code <code>TAC-LV-2026-00X</code>, manager sign-off stamp, and a <strong>Print / Save PDF</strong> button.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Instruction 6 -->
+                    <div style="border: 1px solid var(--border); border-radius: 12px; padding: 20px; background: var(--bg-color); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                                <div style="width: 34px; height: 34px; border-radius: 10px; background: rgba(234, 179, 8, 0.15); color: #EAB308; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;">6</div>
+                                <h3 style="font-size: 15px; font-weight: 600; color: var(--primary-text);">Team Absence Calendar & Filters</h3>
+                            </div>
+                            <ol style="font-size: 12px; color: var(--primary-text); padding-left: 18px; line-height: 1.7; margin: 0;">
+                                <li>Click the <strong>Calendar</strong> tab in the navigation header.</li>
+                                <li>Use the <code>&lt;</code> Previous and <code>&gt;</code> Next buttons to browse months.</li>
+                                <li>View scheduled team absence bars (Green = Approved, Gold = Pending).</li>
+                                <li>Use the <strong>Department Filter</strong> toolbar to filter by Engineering, Product, HR, Marketing, or Sales.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="settings_section" style="display: none;">
+                <div class="card">
+                    <div class="card-header" style="margin-bottom: var(--sp-3);">
+                        <h2>Settings</h2>
+                    </div>
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label id="setting_id_label">Employee ID</label>
+                            <input type="text" id="setting_id" readonly disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" id="setting_name" readonly disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" id="setting_role" readonly disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="setting_dept" readonly disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Company Email</label>
+                            <input type="text" id="setting_email" readonly disabled>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+                    </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let allRequests = [];
+
+        
+        
+        // ================= FEATURE 5: DEPARTMENT DROPDOWN =================
+        function toggleDeptDropdown() {
+            document.getElementById('dept_dropdown_options').classList.toggle('open');
+        }
+
+        function selectDept(value, text) {
+            document.getElementById('dept_filter').value = value;
+            document.getElementById('selected_dept_text').innerText = text;
+            
+            const options = document.querySelectorAll('#dept_dropdown_options .select-option');
+            options.forEach(el => el.classList.remove('selected'));
+            if(event && event.target) event.target.classList.add('selected');
+            
+            document.getElementById('dept_dropdown_options').classList.remove('open');
+            filterTable();
+        }
+
+        // Close dept dropdown on outside click
+        document.addEventListener('click', function(event) {
+            const container = document.getElementById('dept_dropdown_container');
+            if (container && !container.contains(event.target)) {
+                const options = document.getElementById('dept_dropdown_options');
+                if (options) options.classList.remove('open');
+            }
+        });
+
+        // Department mapping helper
+        function getEmployeeDept(empId) {
+            const savedDept = localStorage.getItem('user_dept_' + empId);
+            if (savedDept) return savedDept;
+            if (empId === 1) return 'Human Resources';
+            if (empId === 2) return 'Engineering';
+            if (empId === 3) return 'Product';
+            return 'Engineering';
+        }
+
+        // ================= FEATURE 3: PRINTABLE LEAVE APPROVAL SLIP =================
+        function printApprovalSlip(reqId) {
+            const req = allRequests.find(r => r.id === reqId);
+            if (!req) return;
+
+            const empCode = formatUserCode('employee', req.employee_id);
+            const email = getCompanyEmail(req.employee_name);
+            const dept = getEmployeeDept(req.employee_id);
+
+            const printWindow = window.open('', '_blank', 'width=700,height=800');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Leave Approval Slip #${req.id} - Tactive</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Arial, sans-serif; padding: 40px; color: #111; }
+                        .header { border-bottom: 2px solid #B8862E; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+                        .brand { font-size: 24px; font-weight: bold; color: #B8862E; }
+                        .subtitle { font-size: 13px; color: #666; margin-top: 4px; }
+                        .slip-title { font-size: 18px; font-weight: bold; text-align: center; text-transform: uppercase; margin: 20px 0; letter-spacing: 1px; color: #333; }
+                        .section { background: #f9f9f9; border: 1px solid #e5e5e5; border-radius: 6px; padding: 16px; margin-bottom: 20px; }
+                        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px; }
+                        .label { color: #666; font-size: 12px; text-transform: uppercase; font-weight: 600; }
+                        .value { font-weight: 600; color: #111; margin-top: 2px; }
+                        .stamp { display: inline-block; border: 2px solid #10B981; color: #10B981; font-weight: bold; text-transform: uppercase; padding: 6px 16px; border-radius: 4px; font-size: 14px; letter-spacing: 1px; }
+                        .footer { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 16px; font-size: 11px; color: #777; display: flex; justify-content: space-between; }
+                        @media print { .no-print { display: none; } }
+                
+        /* Hide native browser password reveal icons */
+        input::-ms-reveal,
+        input::-ms-clear,
+        input::-webkit-contacts-auto-fill-button,
+        input::-webkit-credentials-auto-fill-button {
+            display: none !important;
+        }
+
+        /* Interactive Visual Effects */
+        .page-fade-in {
+            animation: fadeInSection 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes fadeInSection {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            position: relative;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 16px; right: 16px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: scale(0.97) !important;
+        }
+
+        .clickable-row td:first-child {
+            border-left: 3px solid transparent;
+            transition: border-left-color 0.2s ease;
+        }
+        .clickable-row:hover td:first-child {
+            border-left-color: var(--accent);
+        }
+    
+        /* Complete Mobile Responsiveness (Smartphones & Tablets) */
+        @media (max-width: 768px) {
+            .auth-layout { flex-direction: column; min-height: auto; }
+            .auth-left { padding: 40px 20px 24px 20px !important; flex: initial; }
+            .auth-right { padding: 24px 16px; width: 100%; }
+            .auth-card { padding: 24px 20px; max-width: 100%; }
+            
+            .navbar { height: auto; padding: 10px 0; }
+            .nav-content { flex-direction: column; gap: 10px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 8px; height: auto; }
+            .nav-link { height: 38px; font-size: 13px; border-bottom: none; border-radius: 6px; padding: 0 10px; }
+            .nav-link.active { background: var(--bg-color); border-bottom: none; }
+            
+            .kpi-grid { grid-template-columns: 1fr !important; gap: 12px; }
+            .grid-2 { grid-template-columns: 1fr !important; }
+            
+            .container { padding-left: 12px; padding-right: 12px; }
+            .toast-container { right: 16px; left: 16px; bottom: 16px; align-items: center; }
+            .toast { min-width: auto; width: 100%; }
+            
+            /* Responsive Calendar */
+            #calendar_grid > div { min-height: 75px; padding: 4px; }
+        }
+
+    
+        /* Workflow Flowchart Responsiveness */
+        .workflow-flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .workflow-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 120px;
+        }
+        .workflow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+        .arrow-dt { display: inline-block; width: 14px; height: 14px; }
+        .arrow-mb { display: none; width: 14px; height: 14px; }
+
+        @media (max-width: 768px) {
+            .workflow-flow-container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .workflow-card {
+                width: 100%;
+            }
+            .workflow-arrow {
+                padding: 4px 0;
+            }
+            .arrow-dt { display: none; }
+            .arrow-mb { display: inline-block; }
+        }
+
+    </style>
+                </head>
+                <body>
+                    <button class="no-print" onclick="window.print()" style="background:#B8862E; color:white; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold; margin-bottom:20px;">Print / Save PDF</button>
+                    
+                    <div class="header">
+                        <div>
+                            <div class="brand">Tactive Software Solutions</div>
+                            <div class="subtitle">Official HR Absence Approval Document</div>
+                        </div>
+                        <div style="text-align: right; font-size: 12px; color: #666;">
+                            <div>Doc Ref: <strong>TAC-LV-2026-00${req.id}</strong></div>
+                            <div>Issued: ${new Date().toLocaleDateString()}</div>
+                        </div>
+                    </div>
+
+                    <div class="slip-title">Official Leave Approval Slip</div>
+
+                    <div class="section">
+                        <div class="grid">
+                            <div><div class="label">Employee Name</div><div class="value">${req.employee_name}</div></div>
+                            <div><div class="label">Employee Code</div><div class="value">${empCode}</div></div>
+                            <div><div class="label">Department</div><div class="value">${dept}</div></div>
+                            <div><div class="label">Company Email</div><div class="value">${email}</div></div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="grid">
+                            <div><div class="label">Start Date</div><div class="value">${req.start_date} ${req.half_day_start?'(Half Day)':''}</div></div>
+                            <div><div class="label">End Date</div><div class="value">${req.end_date} ${req.half_day_end?'(Half Day)':''}</div></div>
+                            <div><div class="label">Approved Duration</div><div class="value">${req.duration} Day(s)</div></div>
+                            <div><div class="label">Approval Status</div><div class="value" style="margin-top:4px;"><span class="stamp">OFFICIALLY APPROVED</span></div></div>
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <div class="label">Stated Absence Reason</div>
+                            <div class="value" style="margin-top: 4px; font-weight: normal; background: white; padding: 8px; border-radius: 4px; border: 1px solid #eee;">${req.reason}</div>
+                        </div>
+                    </div>
+
+                    <div class="footer">
+                        <div>Tactive HR Operations Team &bull; Confidential</div>
+                        <div>Authorized Manager Sign-off Verified &check;</div>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // ================= FEATURE 2: TEAM ABSENCE CALENDAR (ENTERPRISE DYNAMIC MONTH VIEW) =================
+        let currentCalMonth = 7; // August (0-indexed: 7 = August)
+        let currentCalYear = 2026;
+
+        function changeCalendarMonth(delta) {
+            currentCalMonth += delta;
+            if (currentCalMonth > 11) { currentCalMonth = 0; currentCalYear++; }
+            if (currentCalMonth < 0) { currentCalMonth = 11; currentCalYear--; }
+            renderCalendarPage();
+        }
+
+        function renderCalendarPage() {
+            const container = document.getElementById('calendar_grid_container');
+            if (!container) return;
+
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const labelEl = document.getElementById('calendar_month_label');
+            if (labelEl) labelEl.innerText = `${monthNames[currentCalMonth]} ${currentCalYear}`;
+
+            const firstDay = new Date(currentCalYear, currentCalMonth, 1).getDay();
+            const daysInMonth = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+            const prevMonthDays = new Date(currentCalYear, currentCalMonth, 0).getDate();
+            
+            let html = `
+                <div style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: var(--card-bg); box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+                    <!-- Day Headers -->
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); background: var(--bg-color); border-bottom: 1px solid var(--border); text-align: center; font-weight: 700; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;">
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Sun</div>
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Mon</div>
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Tue</div>
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Wed</div>
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Thu</div>
+                        <div style="padding: 12px 0; border-right: 1px solid var(--border);">Fri</div>
+                        <div style="padding: 12px 0;">Sat</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr);">
+            `;
+
+            // Previous month padding cells with crisp readable numbers
+            for (let i = 0; i < firstDay; i++) {
+                const prevDayNum = prevMonthDays - firstDay + i + 1;
+                const isWeekend = i === 0;
+                const bgStyle = isWeekend ? 'background: rgba(0, 0, 0, 0.03);' : 'background: rgba(0, 0, 0, 0.015);';
+                html += `
+                    <div style="border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 10px; min-height: 105px; ${bgStyle} display: flex; flex-direction: column;">
+                        <div style="font-weight: 600; font-size: 12px; color: var(--text-muted); opacity: 0.45;">${prevDayNum}</div>
+                    </div>
+                `;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const colIndex = (firstDay + day - 1) % 7;
+                const isWeekend = colIndex === 0 || colIndex === 6;
+                const monthStr = String(currentCalMonth + 1).padStart(2, '0');
+                const dayStr = `${currentCalYear}-${monthStr}-${String(day).padStart(2, '0')}`;
+                const isToday = (day === 6 && currentCalMonth === 7 && currentCalYear === 2026);
+                
+                // Active leaves
+                const activeOnDay = allRequests.filter(r => {
+                    return r.start_date <= dayStr && r.end_date >= dayStr && r.status !== 'REJECTED';
+                });
+
+                let dayContent = '';
+                activeOnDay.forEach(r => {
+                    const isApproved = r.status === 'APPROVED';
+                    const borderLeftColor = isApproved ? '#10B981' : '#F59E0B';
+                    const badgeClass = isApproved ? 'badge-approved' : 'badge-pending';
+                    const firstName = r.employee_name.split(' ')[0];
+                    
+                    dayContent += `
+                        <div style="border-left: 3px solid ${borderLeftColor}; background: var(--bg-color); padding: 4px 8px; border-radius: 4px; margin-top: 6px; font-size: 11px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid var(--border);" title="${r.employee_name}: ${r.reason}">
+                            <span style="font-weight: 600; color: var(--primary-text);">${firstName}</span>
+                            <span class="badge ${badgeClass}" style="font-size: 9px; padding: 1px 5px; line-height: 1.2;">${r.status}</span>
+                        </div>
+                    `;
+                });
+
+                const borderRightStyle = colIndex === 6 ? '' : 'border-right: 1px solid var(--border);';
+                const weekendBg = isWeekend ? 'background: rgba(0, 0, 0, 0.025);' : '';
+                const dateCircle = isToday 
+                    ? `<span style="background: var(--accent); color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; box-shadow: 0 2px 4px rgba(184, 134, 46, 0.3);">${day}</span>` 
+                    : `<span style="font-weight: 600; font-size: 13px; color: ${isWeekend ? 'var(--text-muted)' : 'var(--primary-text)'};">${day}</span>`;
+
+                html += `
+                    <div style="${borderRightStyle} border-bottom: 1px solid var(--border); padding: 10px; min-height: 105px; ${weekendBg} display: flex; flex-direction: column;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            ${dateCircle}
+                        </div>
+                        <div style="margin-top: 2px; flex: 1;">${dayContent}</div>
+                    </div>
+                `;
+            }
+
+            // Next month padding cells with crisp readable numbers
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = (7 - (totalCells % 7)) % 7;
+            for (let i = 1; i <= remainingCells; i++) {
+                const colIndex = (totalCells + i - 1) % 7;
+                const borderRightStyle = colIndex === 6 ? '' : 'border-right: 1px solid var(--border);';
+                const isWeekend = colIndex === 0 || colIndex === 6;
+                const bgStyle = isWeekend ? 'background: rgba(0, 0, 0, 0.03);' : 'background: rgba(0, 0, 0, 0.015);';
+                html += `
+                    <div style="${borderRightStyle} border-bottom: 1px solid var(--border); padding: 10px; min-height: 105px; ${bgStyle} display: flex; flex-direction: column;">
+                        <div style="font-weight: 600; font-size: 12px; color: var(--text-muted); opacity: 0.45;">${i}</div>
+                    </div>
+                `;
+            }
+
+            html += '</div></div>';
+            container.innerHTML = `<div style="overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px;"><div style="min-width: 650px;">${html}</div></div>`;
+            lucide.createIcons();
+        }
+
+        
+        function checkPasswordInput(inputEl, buttonId) {
+            const btn = document.getElementById(buttonId);
+            if (!btn) return;
+            if (inputEl.value.trim().length > 0) {
+                btn.style.display = 'flex';
+            } else {
+                btn.style.display = 'none';
+                inputEl.type = 'password';
+                const iconId = buttonId === 'btn_toggle_login' ? 'toggle_login_icon' : 'toggle_reg_icon';
+                const icon = document.getElementById(iconId);
+                if (icon) icon.setAttribute('data-lucide', 'eye');
+                lucide.createIcons();
+            }
+        }
+
+        function togglePasswordVisibility(inputId, buttonId) {
+            const input = document.getElementById(inputId);
+            const button = document.getElementById(buttonId);
+            if (!input || !button) return;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.innerHTML = '<i data-lucide="eye" style="width: 18px; height: 18px;"></i>';
+                button.setAttribute('title', 'Hide Password');
+            } else {
+                input.type = 'password';
+                button.innerHTML = '<i data-lucide="eye-off" style="width: 18px; height: 18px;"></i>';
+                button.setAttribute('title', 'Show Password');
+            }
+            lucide.createIcons();
+        }
+
+        
+        // Confetti Burst Effect for Approvals & Submissions
+        function triggerConfetti() {
+            const colors = ['#B8862E', '#EAB308', '#10B981', '#3B82F6', '#EC4899'];
+            for (let i = 0; i < 30; i++) {
+                const conf = document.createElement('div');
+                conf.style.position = 'fixed';
+                conf.style.left = (50 + (Math.random() * 40 - 20)) + 'vw';
+                conf.style.top = '40vh';
+                conf.style.width = (Math.random() * 8 + 4) + 'px';
+                conf.style.height = (Math.random() * 8 + 4) + 'px';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                conf.style.zIndex = '99999';
+                conf.style.pointerEvents = 'none';
+                conf.style.transition = 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
+                document.body.appendChild(conf);
+
+                setTimeout(() => {
+                    const x = (Math.random() * 300 - 150);
+                    const y = (Math.random() * 300 - 150);
+                    conf.style.transform = `translate(${x}px, ${y}px) rotate(${Math.random() * 360}deg)`;
+                    conf.style.opacity = '0';
+                }, 20);
+
+                setTimeout(() => conf.remove(), 1300);
+            }
+        }
+
+        
+        // ================= DARK / LIGHT THEME TOGGLE =================
+        function initTheme() {
+            const savedTheme = localStorage.getItem('leave_app_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('leave_app_theme', newTheme);
+            updateThemeIcon(newTheme);
+            showToast(`Switched to ${newTheme.toUpperCase()} mode`, 'success');
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('theme_icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+                lucide.createIcons();
+            }
+        }
+        
+        // Auto-run theme initialization
+        document.addEventListener('DOMContentLoaded', initTheme);
+
+        // ================= HELPERS & TRACKER =================
+        
+        function calculateWorkingDays(startDateStr, endDateStr, halfDayStart = false, halfDayEnd = false) {
+            let cur = new Date(startDateStr + 'T00:00:00');
+            let end = new Date(endDateStr + 'T00:00:00');
+            let workingDays = 0;
+
+            while (cur <= end) {
+                let dayOfWeek = cur.getDay(); // 0 = Sunday, 6 = Saturday
+                if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                    workingDays++;
+                }
+                cur.setDate(cur.getDate() + 1);
+            }
+
+            let startDayOfWeek = new Date(startDateStr + 'T00:00:00').getDay();
+            let endDayOfWeek = new Date(endDateStr + 'T00:00:00').getDay();
+
+            let duration = workingDays;
+            if (workingDays > 0) {
+                if (halfDayStart && startDayOfWeek !== 0 && startDayOfWeek !== 6) {
+                    duration -= 0.5;
+                }
+                if (halfDayEnd && endDayOfWeek !== 0 && endDayOfWeek !== 6 && startDateStr !== endDateStr) {
+                    duration -= 0.5;
+                }
+            }
+            return Math.max(0, duration);
+        }
+
+        function formatUserCode(role, id) {
+            if (!id) return '';
+            const prefix = role === 'manager' ? 'MG' : 'EMP';
+            return `${prefix}${String(id).padStart(3, '0')}`;
+        }
+
+        function getCompanyEmail(name) {
+            if (!name) return 'user@tactive.com';
+            const cleanName = name.toLowerCase().trim().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '.');
+            return `${cleanName}@tactive.com`;
+        }
+
+        function renderTrackerPage() {
+            const container = document.getElementById('tracker_content_list');
+            if (!container || !currentUser) return;
+
+            const userRequests = allRequests.filter(r => r.employee_id === currentUser.id);
+            userRequests.sort((a, b) => b.id - a.id);
+
+            if (userRequests.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: 48px 16px;">
+                        <i data-lucide="clock" style="width: 40px; height: 40px; color: var(--text-muted); opacity: 0.5; margin-bottom: 8px;"></i>
+                        <div style="font-size: 15px; font-weight: 600;">No Leave Applications Found</div>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Submit a request under Overview to start tracking your leave status timeline.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            let html = '<div style="display: flex; flex-direction: column; gap: 20px;">';
+            userRequests.forEach(r => {
+                const userCode = formatUserCode(currentUser.role, r.employee_id);
+                const email = getCompanyEmail(currentUser.name);
+                
+                const startDisplay = r.start_date + (r.half_day_start ? ' (Half Day)' : '');
+                const endDisplay = r.end_date + (r.half_day_end ? ' (Half Day)' : '');
+                
+                // Audit timestamps
+                const appliedDate = new Date();
+                appliedDate.setDate(appliedDate.getDate() - Math.max(1, (allRequests.length - r.id + 1)));
+                const appliedFormatted = appliedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' at 09:30 AM';
+                
+                const isPending = r.status === 'PENDING';
+                const isApproved = r.status === 'APPROVED';
+                const isRejected = r.status === 'REJECTED';
+                
+                const decisionDate = new Date(appliedDate.getTime() + 1000 * 60 * 60 * 4);
+                const decisionFormatted = decisionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' at 01:45 PM';
+
+                const statusBadge = `<span class="badge badge-${r.status.toLowerCase()}"><i data-lucide="${isApproved ? 'check' : isRejected ? 'x' : 'clock'}" style="width:12px;height:12px;"></i> ${r.status}</span>`;
+                const cardLeftBorder = isApproved ? '#10B981' : isRejected ? '#F43F5E' : 'var(--accent)';
+
+                const slipBtn = isApproved 
+                    ? `<button class="btn btn-primary" style="width: 100%; height: 38px; padding: 0 16px; font-size: 13px; font-weight: 600; gap: 6px; border-radius: 8px; margin-top: 12px; justify-content: center; box-shadow: 0 2px 6px rgba(184, 134, 46, 0.25);" onclick="printApprovalSlip(${r.id})"><i data-lucide="printer" style="width: 15px; height: 15px;"></i> Print Official HR Leave Slip</button>`
+                    : '';
+
+                html += `
+                    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 24px; box-shadow: 0 4px 14px 0 rgba(0,0,0,0.04);">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="font-weight: 700; font-size: 17px; color: var(--primary-text);">Application #${r.id}</span>
+                                    ${statusBadge}
+                                </div>
+                                <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+                                    Applicant: <strong>${currentUser.name}</strong> (${userCode}) &bull; ${email}
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div style="text-align: right; font-size: 13px; color: var(--text-muted); background: var(--bg-color); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);">
+                                    <div>Duration: <strong style="color: var(--primary-text);">${r.duration} day(s)</strong></div>
+                                    <div style="font-size: 11px; margin-top: 2px;">${startDisplay} &rarr; ${endDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                        ${slipBtn ? `<div style="margin-bottom: 16px;">${slipBtn}</div>` : ''}
+
+                        <div style="background: var(--bg-color); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-bottom: 24px; font-size: 13px; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+                            <strong style="color: var(--primary-text);">Reason for Absence:</strong> ${r.reason}
+                        </div>
+
+                        <!-- CONNECTED STEPPER TIMELINE -->
+                        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
+                            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 20px; letter-spacing: 0.05em;">Audit & Action Timelines</div>
+                            
+                            <div style="display: flex; align-items: flex-start; justify-content: space-between; position: relative; max-width: 680px; margin: 0 auto; padding: 0 10px;">
+                                <!-- Connecting Line 1 -> 2 -->
+                                <div style="position: absolute; top: 16px; left: 15%; width: 35%; height: 2px; background: ${isPending ? 'var(--border)' : '#10B981'}; z-index: 1;"></div>
+                                <!-- Connecting Line 2 -> 3 -->
+                                <div style="position: absolute; top: 16px; left: 50%; width: 35%; height: 2px; background: ${isApproved ? '#10B981' : isRejected ? '#F43F5E' : 'var(--border)'}; z-index: 1;"></div>
+
+                                <!-- Step 1 -->
+                                <div style="display: flex; flex-direction: column; align-items: center; z-index: 2; text-align: center; width: 130px;">
+                                    <div style="width: 34px; height: 34px; border-radius: 50%; background: #10B981; color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(16,185,129,0.3);">
+                                        <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                    <div style="font-weight: 600; font-size: 12px; margin-top: 8px; color: var(--primary-text);">1. Applied Time</div>
+                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${appliedFormatted}</div>
+                                </div>
+
+                                <!-- Step 2 -->
+                                <div style="display: flex; flex-direction: column; align-items: center; z-index: 2; text-align: center; width: 130px;">
+                                    <div style="width: 34px; height: 34px; border-radius: 50%; background: ${isPending ? 'var(--status-pending)' : '#10B981'}; color: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                                        <i data-lucide="${isPending ? 'clock' : 'user-check'}" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                    <div style="font-weight: 600; font-size: 12px; margin-top: 8px; color: var(--primary-text);">2. Manager Review</div>
+                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${isPending ? 'In Progress' : 'Reviewed'}</div>
+                                </div>
+
+                                <!-- Step 3 -->
+                                <div style="display: flex; flex-direction: column; align-items: center; z-index: 2; text-align: center; width: 130px;">
+                                    <div style="width: 34px; height: 34px; border-radius: 50%; background: ${isApproved ? '#10B981' : isRejected ? '#F43F5E' : 'var(--card-bg)'}; color: ${isApproved || isRejected ? 'white' : 'var(--text-muted)'}; border: ${!isApproved && !isRejected ? '2px solid var(--border)' : 'none'}; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                                        <i data-lucide="${isApproved ? 'check' : isRejected ? 'x' : 'clock'}" style="width: 16px; height: 16px;"></i>
+                                    </div>
+                                    <div style="font-weight: 600; font-size: 12px; margin-top: 8px; color: ${isApproved ? '#10B981' : isRejected ? '#F43F5E' : 'var(--primary-text)'};">3. Final Decision</div>
+                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">${isPending ? 'Awaiting Action' : decisionFormatted}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = `<div style="overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 8px;"><div style="min-width: 650px;">${html}</div></div>`;
+            lucide.createIcons();
+        }
+
+        // ================= UI HELPERS =================
+        function showSection(section) {
+            document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('page-fade-in'));
+            const targetSec = document.getElementById(section + '_section');
+            if (targetSec) {
+                targetSec.classList.add('page-fade-in');
+            }
+            document.getElementById('overview_section').style.display = section === 'overview' ? 'block' : 'none';
+            document.getElementById('requests_section').style.display = section === 'requests' ? 'block' : 'none';
+            if (document.getElementById('calendar_section')) document.getElementById('calendar_section').style.display = section === 'calendar' ? 'block' : 'none';
+            if (document.getElementById('tracker_section')) document.getElementById('tracker_section').style.display = section === 'tracker' ? 'block' : 'none';
+            if (document.getElementById('help_section')) document.getElementById('help_section').style.display = section === 'help' ? 'block' : 'none';
+            document.getElementById('settings_section').style.display = section === 'settings' ? 'block' : 'none';
+            document.getElementById('approvals_section').style.display = section === 'approvals' ? 'block' : 'none';
+            
+            document.getElementById('nav_overview').classList.toggle('active', section === 'overview');
+            document.getElementById('nav_requests').classList.toggle('active', section === 'requests');
+            if(document.getElementById('nav_calendar')) document.getElementById('nav_calendar').classList.toggle('active', section === 'calendar');
+            if(document.getElementById('nav_tracker')) document.getElementById('nav_tracker').classList.toggle('active', section === 'tracker');
+            if(document.getElementById('nav_help')) document.getElementById('nav_help').classList.toggle('active', section === 'help');
+            document.getElementById('nav_settings').classList.toggle('active', section === 'settings');
+            if(document.getElementById('nav_approvals')) document.getElementById('nav_approvals').classList.toggle('active', section === 'approvals');
+            
+            if (section === 'tracker') renderTrackerPage();
+            if (section === 'calendar') renderCalendarPage();
+            lucide.createIcons();
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast_container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? 'check-circle' : 'alert-circle';
+            toast.innerHTML = `<i data-lucide="${icon}"></i> <div><h4 style="margin:0;font-size:13px;font-weight:600;">${type === 'success' ? 'Success' : 'Error'}</h4><p style="margin:0;font-size:12px;color:inherit;opacity:0.9;margin-top:2px;">${message}</p></div>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.2s ease forwards';
+                setTimeout(() => toast.remove(), 200);
+            }, 4000);
+        }
+
+        function toggleAuthView(view) {
+            document.getElementById('login_view').style.display = view === 'login' ? 'block' : 'none';
+            document.getElementById('register_view').style.display = view === 'register' ? 'block' : 'none';
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderWorkflowTimeline(status) {
+            const isApproved = status === 'APPROVED';
+            const isRejected = status === 'REJECTED';
+            const isPending = status === 'PENDING';
+            
+            return `
+                <div class="timeline">
+                    <div class="tl-node active"></div>
+                    <div class="tl-line ${isPending ? '' : 'active'}"></div>
+                    <div class="tl-node ${isPending ? '' : 'active'}"></div>
+                    <div class="tl-line ${isApproved || isRejected ? 'active' : ''}"></div>
+                    <div class="tl-node ${isApproved ? 'success' : isRejected ? 'danger' : ''}"></div>
+                </div>
+            `;
+        }
+
+        // ================= CUSTOM DROPDOWN =================
+        function toggleDropdown() {
+            document.getElementById('status_dropdown_options').classList.toggle('open');
+        }
+
+        function selectStatus(value, text) {
+            document.getElementById('status_filter').value = value;
+            document.getElementById('selected_status_text').innerText = text;
+            
+            // Update selected class
+            document.querySelectorAll('.select-option').forEach(el => el.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            document.getElementById('status_dropdown_options').classList.remove('open');
+            filterTable();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const container = document.getElementById('status_dropdown_container');
+            if (container && !container.contains(event.target)) {
+                const options = document.getElementById('status_dropdown_options');
+                if (options) options.classList.remove('open');
+            }
+        });
+
+        // ================= AUTHENTICATION =================
+        async function fetchUser(id) {
+            const cleanId = parseInt(id, 10);
+            if (isNaN(cleanId)) throw new Error('Invalid ID format');
+            const res = await fetch(`/employees/${cleanId}`);
+            if (!res.ok) throw new Error('Employee not found');
+            return await res.json();
+        }
+
+        async function handleLogin() {
+            const btn = document.getElementById('btn_login');
+            const rawInput = document.getElementById('login_id').value.trim();
+            const inputPass = document.getElementById('login_password') ? document.getElementById('login_password').value : '';
+            
+            if (!rawInput) { showToast('Please enter your ID (e.g. EMP002 or MG001).', 'error'); return; }
+            if (!inputPass) { showToast('Please enter your password.', 'error'); return; }
+
+            const cleanId = rawInput.replace(/[^0-9]/g, '');
+            if (!cleanId) { showToast('Invalid ID format. Use EMP002, MG001 or number.', 'error'); return; }
+
+            btn.disabled = true; btn.classList.add('loading-btn');
+            try {
+                const user = await fetchUser(cleanId);
+                
+                // Enforce prefix matching so EMP001 doesn't open MG001 (Manager Alice)
+                const upperInput = rawInput.toUpperCase();
+                if (upperInput.startsWith('EMP') && user.role !== 'employee') {
+                    const correctCode = formatUserCode(user.role, user.id);
+                    showToast(`${rawInput} is a Manager account (${user.name}). Please sign in as ${correctCode}.`, 'error');
+                    return;
+                }
+                if (upperInput.startsWith('MG') && user.role !== 'manager') {
+                    const correctCode = formatUserCode(user.role, user.id);
+                    showToast(`${rawInput} is an Employee account (${user.name}). Please sign in as ${correctCode}.`, 'error');
+                    return;
+                }
+
+                // Password Verification by Choice
+                const storedPass = localStorage.getItem('user_pass_' + user.id);
+                if (storedPass) {
+                    if (storedPass !== inputPass) {
+                        showToast('Incorrect password. Please try again.', 'error');
+                        return;
+                    }
+                } else {
+                    const pwdErr = validatePassword(inputPass);
+                    if (pwdErr) {
+                        showToast(pwdErr, 'error');
+                        return;
+                    }
+                    localStorage.setItem('user_pass_' + user.id, inputPass);
+                    showToast(`Password saved for ${user.name}!`, 'success');
+                }
+
+                currentUser = user;
+                localStorage.setItem('entLeaveAppUserId', user.id);
+                initDashboard();
+            } catch (err) {
+                showToast('Account not found. Click "Register here" to create your account.', 'error');
+            } finally {
+                btn.disabled = false; btn.classList.remove('loading-btn');
+            }
+        }
+
+        function validatePassword(pwd) {
+            if (!pwd || pwd.length < 6) {
+                return "Password must be at least 6 characters long.";
+            }
+            if (!/[a-zA-Z]/.test(pwd)) {
+                return "Password must contain at least one letter (a-z, A-Z).";
+            }
+            if (!/[0-9]/.test(pwd)) {
+                return "Password must contain at least one number (0-9).";
+            }
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~`]/.test(pwd)) {
+                return "Password must contain at least one special character (e.g. @, #, $, !).";
+            }
+            return null;
+        }
+
+        async function handleRegister() {
+            const btn = document.getElementById('btn_register');
+            const name = document.getElementById('reg_name').value;
+            const role = document.getElementById('reg_role').value;
+            const password = document.getElementById('reg_password') ? document.getElementById('reg_password').value : '';
+
+            if (!name) { showToast('Full Name is required.', 'error'); return; }
+            if (!password) { showToast('Password is required.', 'error'); return; }
+            
+            const pwdErr = validatePassword(password);
+            if (pwdErr) {
+                showToast(pwdErr, 'error');
+                return;
+            }
+
+            btn.disabled = true; btn.classList.add('loading-btn');
+            try {
+                const res = await fetch('/employees', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, role: role.toLowerCase() })
+                });
+                let data = {};
+                try { data = await res.json(); } catch(e) {}
+                
+                if (res.ok) {
+                    const dept = document.getElementById('reg_dept') ? document.getElementById('reg_dept').value : 'Engineering';
+                    localStorage.setItem('user_dept_' + data.id, dept);
+                    localStorage.setItem('user_pass_' + data.id, password);
+                    const userCode = formatUserCode(data.role, data.id);
+                    showToast(`Registered successfully! Your ID is: ${userCode}`, 'success');
+                    document.getElementById('reg_name').value = '';
+                    if (document.getElementById('reg_password')) document.getElementById('reg_password').value = '';
+                    document.getElementById('login_id').value = userCode; 
+                    toggleAuthView('login');
+                } else {
+                    showToast(data.error || 'Registration failed.', 'error');
+                }
+            } catch (err) {
+                showToast('Network error: ' + err.message, 'error');
+            } finally {
+                btn.disabled = false; btn.classList.remove('loading-btn');
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('entLeaveAppUserId');
+            document.getElementById('dashboard_page').style.display = 'none';
+            document.getElementById('auth_page').style.display = 'flex';
+            document.getElementById('login_id').value = ''; if (document.getElementById('login_password')) document.getElementById('login_password').value = '';
+        }
+
+        // ================= DASHBOARD & DATA =================
+        async function initDashboard() {
+            document.getElementById('auth_page').style.display = 'none';
+            document.getElementById('dashboard_page').style.display = 'block';
+            
+            // Adjust UI based on Role
+            const isManager = currentUser.role === 'manager';
+            document.querySelectorAll('.manager-only').forEach(el => {
+                if (el.tagName === 'TH' || el.tagName === 'TD') {
+                    el.style.display = isManager ? 'table-cell' : 'none';
+                } else if (el.classList.contains('nav-link')) {
+                    el.style.display = isManager ? 'flex' : 'none';
+                } else {
+                    el.style.display = isManager ? 'inline-block' : 'none';
+                }
+            });
+            
+            document.querySelectorAll('.employee-only').forEach(el => {
+                if (el.classList.contains('nav-link')) {
+                    el.style.display = !isManager ? 'flex' : 'none';
+                } else {
+                    el.style.display = !isManager ? 'block' : 'none';
+                }
+            });
+            
+            const mainGrid = document.getElementById('main_content_grid');
+            if (mainGrid) {
+                if (isManager) {
+                    mainGrid.classList.remove('grid-2');
+                } else {
+                    mainGrid.classList.add('grid-2');
+                }
+            }
+
+            await loadDashboardData();
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Refresh user data
+                currentUser = await fetchUser(currentUser.id);
+                
+                // Update Employee Card
+                const firstName = currentUser.name.split(' ')[0];
+                document.getElementById('nav_user_name').innerText = firstName;
+                document.getElementById('nav_avatar').innerText = firstName.charAt(0).toUpperCase();
+                
+                const isManager = currentUser.role === 'manager';
+                const userCode = formatUserCode(currentUser.role, currentUser.id);
+                const companyEmail = getCompanyEmail(currentUser.name);
+                const userDept = getEmployeeDept(currentUser.id);
+
+                document.getElementById('info_card_header').innerText = isManager ? 'Manager Details' : 'Employee Details';
+                document.getElementById('info_id').innerText = `${isManager ? 'Manager' : 'Employee'} ID: ${userCode} · ${userDept}`;
+                if (document.getElementById('info_email')) document.getElementById('info_email').innerText = companyEmail;
+                document.getElementById('setting_id_label').innerText = isManager ? 'Manager ID' : 'Employee ID';
+
+                document.getElementById('info_name').innerText = currentUser.name;
+                document.getElementById('setting_id').value = userCode;
+                if (document.getElementById('setting_dept')) document.getElementById('setting_dept').value = userDept;
+                if (document.getElementById('setting_email')) document.getElementById('setting_email').value = companyEmail;
+                document.getElementById('badge_role').innerText = currentUser.role.toUpperCase();
+                document.getElementById('setting_name').value = currentUser.name;
+                document.getElementById('setting_role').value = currentUser.role ? (currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)) : '';
+                
+
+                
+                // Fetch all requests
+                const res = await fetch('/leaves');
+                
+                allRequests = await res.json();
+
+                const empCache = {};
+                for (let r of allRequests) {
+                    if (!empCache[r.employee_id]) {
+                        try {
+                            const empRes = await fetch('/employees/' + r.employee_id);
+                            if (empRes.ok) {
+                                empCache[r.employee_id] = await empRes.json();
+                            }
+                        } catch(e) {}
+                    }
+                    const empData = empCache[r.employee_id] || { name: 'Employee ' + r.employee_id, leave_balance: 'N/A' };
+                    r.employee_name = empData.name;
+                    r.employee_balance = empData.leave_balance;
+                    
+                    r.duration = calculateWorkingDays(r.start_date, r.end_date, r.half_day_start, r.half_day_end);
+                }
+
+                
+                // Calculate KPIs
+                let pendingCount = 0, approvedCount = 0, rejectedCount = 0;
+                
+                const relevantRequests = currentUser.role === 'manager' ? allRequests : allRequests.filter(r => r.employee_id === currentUser.id);
+                
+                relevantRequests.forEach(r => {
+                    if (r.status === 'PENDING') pendingCount++;
+                    if (r.status === 'APPROVED') approvedCount++;
+                    if (r.status === 'REJECTED') rejectedCount++;
+                });
+
+                document.getElementById('kpi_balance').innerText = currentUser.leave_balance;
+                
+                // Visual System Update: Bar progress
+                const totalDays = 20;
+                const usedDays = totalDays - currentUser.leave_balance;
+                const usedPercent = Math.max(0, Math.min(100, (usedDays / totalDays) * 100));
+                
+                const fillBar = document.getElementById('balance_fill_bar');
+                if (fillBar) fillBar.style.width = usedPercent + '%';
+                
+                const usedLabel = document.getElementById('balance_used_label');
+                if (usedLabel) usedLabel.innerText = usedDays + ' used';
+                document.getElementById('kpi_pending').innerText = pendingCount;
+                document.getElementById('kpi_approved').innerText = approvedCount;
+                document.getElementById('kpi_rejected').innerText = rejectedCount;
+
+                filterTable();
+                renderManagerQueue();
+            } catch (err) {
+                console.error(err);
+                document.body.innerHTML += '<div style="position:fixed;top:0;left:0;z-index:9999;background:red;color:white;padding:20px;">' + err.stack + '</div>';
+                showToast('Failed to load dashboard data.', 'error');
+            }
+        }
+
+        // ================= ACTIONS =================
+        async function handleSubmitLeave() {
+            const btn = document.getElementById('btn_submit');
+            const start_date = document.getElementById('start_date').value;
+            const end_date = document.getElementById('end_date').value;
+            const leaveType = document.getElementById('leave_type') ? document.getElementById('leave_type').value : 'Casual Leave';
+            const rawReason = document.getElementById('reason').value;
+            const reason = rawReason ? `[${leaveType}] ${rawReason}` : '';
+            const half_day_start = document.getElementById('half_day_start').checked;
+            const half_day_end = document.getElementById('half_day_end').checked;
+
+            if (!start_date || !end_date || !reason) { showToast('All fields are required.', 'error'); return; }
+
+            btn.disabled = true; btn.classList.add('loading-btn');
+            try {
+                const res = await fetch('/leaves', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        employee_id: currentUser.id, 
+                        start_date, end_date, reason, half_day_start, half_day_end
+                    })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    showToast('Leave request submitted successfully.', 'success');
+                    document.getElementById('start_date').value = '';
+                    document.getElementById('end_date').value = '';
+                    document.getElementById('reason').value = '';
+                    document.getElementById('half_day_start').checked = false;
+                    document.getElementById('half_day_end').checked = false;
+                    loadDashboardData();
+                } else {
+                    showToast(data.error || 'Submission failed.', 'error');
+                }
+            } catch (err) {
+                showToast('Network error: ' + err.message, 'error');
+            } finally {
+                btn.disabled = false; btn.classList.remove('loading-btn');
+            }
+        }
+
+        async function handleActionLeave(id, action) {
+            try {
+                const res = await fetch(`/leaves/${id}/${action}`, {
+                    method: 'POST',
+                    headers: { 
+                        'Manager-Id': currentUser.id,
+                        'Authorization': currentUser.token
+                    }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    showToast(`Request #${id} successfully ${action}d.`, 'success');
+                    loadDashboardData();
+                } else {
+                    showToast(data.error || 'Action failed.', 'error');
+                }
+            } catch (err) {
+                showToast('Network error: ' + err.message, 'error');
+            }
+        }
+
+        // ================= TABLE RENDERING =================
+        function toggleTracker(id) {
+            const tr = document.getElementById('tracker_' + id);
+            if (tr) tr.classList.toggle('expanded');
+        }
+
+        async function handleInlineAction(requestId, action, btnElement) {
+            if(event) event.stopPropagation();
+            
+            const row = document.getElementById('queue_row_' + requestId);
+            const errSpan = document.getElementById('queue_err_' + requestId);
+            const originalHtml = btnElement.innerHTML;
+            
+            btnElement.innerHTML = '<span class="spinner" style="display:inline-block; border-width:2px; width:14px; height:14px; margin-right:6px;"></span>' + (action === 'approve' ? 'Approving...' : 'Rejecting...');
+            btnElement.disabled = true;
+            if (errSpan) errSpan.style.display = 'none';
+
+            try {
+                const res = await fetch(`/leaves/${requestId}/${action}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Manager-Id': currentUser.id.toString(),
+                        'Authorization': currentUser.token || ''
+                    }
+                });
+                
+                const data = await res.json();
+                if (res.ok) {
+                    if (row) {
+                        row.style.background = action === 'approve' ? 'var(--status-approved-bg)' : 'var(--status-rejected-bg)';
+                        row.style.transition = 'opacity 0.4s';
+                        row.style.opacity = '0';
+                        setTimeout(() => row.remove(), 400);
+                    }
+                    
+                    const reqObj = allRequests.find(r => r.id === requestId);
+                    if (reqObj) reqObj.status = action === 'approve' ? 'APPROVED' : 'REJECTED';
+                    if (action === 'approve') triggerConfetti();
+                    filterTable();
+                    lucide.createIcons();
+                } else {
+                    if (errSpan) {
+                        errSpan.innerText = data.error || 'Failed to ' + action;
+                        errSpan.style.display = 'block';
+                    }
+                    btnElement.innerHTML = originalHtml;
+                    btnElement.disabled = false;
+                }
+            } catch (err) {
+                if (errSpan) {
+                    errSpan.innerText = 'Network error';
+                    errSpan.style.display = 'block';
+                }
+                btnElement.innerHTML = originalHtml;
+                btnElement.disabled = false;
+            }
+        }
+
+        function renderManagerQueue() {
+            const queueContainer = document.getElementById('manager_queue_container');
+            const queueContent = document.getElementById('manager_queue_content');
+            
+            if (currentUser.role !== 'manager') {
+                queueContainer.style.display = 'none';
+                return;
+            }
+            
+            queueContainer.style.display = 'block';
+
+            const pending = allRequests.filter(r => r.status === 'PENDING' && r.employee_id !== currentUser.id);
+            if (pending.length === 0) {
+                queueContent.innerHTML = `<div class="empty-state" style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-card);"><i data-lucide="check-circle" style="width: 32px; height: 32px; margin: 0 auto 0.5rem auto; display: block; opacity: 0.5;"></i>You have no pending requests to approve.</div>`;
+                return;
+            }
+            
+            const grouped = {};
+            pending.forEach(r => {
+                const groupKey = `${r.employee_name} (${formatUserCode('employee', r.employee_id)}) &mdash; Balance: ${r.employee_balance} days`;
+                if (!grouped[groupKey]) grouped[groupKey] = [];
+                grouped[groupKey].push(r);
+            });
+            
+            let html = '';
+            for (const [empHeader, reqs] of Object.entries(grouped)) {
+                html += `<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius-card); margin-bottom: var(--sp-3); padding: var(--sp-3);">`;
+                html += `<h3 style="margin-bottom: var(--sp-2); text-transform: none; color: var(--primary-text); font-weight: 600;">${empHeader}</h3>`;
+                
+                reqs.forEach(r => {
+                    let startDisplay = r.start_date + (r.half_day_start ? ' (0.5)' : '');
+                    let endDisplay = r.end_date + (r.half_day_end ? ' (0.5)' : '');
+                    
+                    // Fetch other requests for this employee to show their schedule/pending work context
+                    const otherReqs = allRequests.filter(req => req.employee_id === r.employee_id && req.id !== r.id);
+                    let historyHtml = '';
+                    if (otherReqs.length > 0) {
+                        historyHtml = `<div style="margin-top: 8px; font-size: 12px; color: var(--text-muted);">
+                            <strong>Other Scheduled Leaves/Requests:</strong>
+                            <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 4px; padding-left: 8px; border-left: 2px solid var(--border);">
+                                ${otherReqs.map(or => {
+                                    const orStart = or.start_date + (or.half_day_start ? ' (0.5)' : '');
+                                    const orEnd = or.end_date + (or.half_day_end ? ' (0.5)' : '');
+                                    const badgeClass = or.status === 'APPROVED' ? 'badge-approved' : or.status === 'REJECTED' ? 'badge-rejected' : 'badge-pending';
+                                    return `<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                        <span>${orStart} &rarr; ${orEnd} (${or.duration} days)</span>
+                                        <span class="badge ${badgeClass}" style="padding: 1px 6px; font-size: 10px; line-height: 1.2;">${or.status}</span>
+                                        <span style="font-style: italic; color: var(--text-muted);">"${or.reason}"</span>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>`;
+                    } else {
+                        historyHtml = `<div style="margin-top: 8px; font-size: 12px; color: var(--text-muted);"><strong>Other Scheduled Leaves/Requests:</strong> None</div>`;
+                    }
+                    
+                    html += `<div id="queue_row_${r.id}" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-top: 1px solid var(--border);">
+                        <div>
+                            <div style="font-size: 14px; font-weight: 500; color: var(--primary-text); margin-bottom: 2px;">${startDisplay} &rarr; ${endDisplay} (${r.duration} days)</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">${r.reason}</div>
+                            ${historyHtml}
+                            <div id="queue_err_${r.id}" class="inline-error"></div>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-self: flex-start;">
+                            <button class="btn btn-outline" style="height: 36px; padding: 0 16px;" onclick="handleInlineAction(${r.id}, 'reject', this)">Reject</button>
+                            <button class="btn btn-primary" style="height: 36px; padding: 0 16px;" onclick="handleInlineAction(${r.id}, 'approve', this)">Approve</button>
+                        </div>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+            queueContent.innerHTML = html;
+        }
+
+        function renderStatusTracker(status) {
+            const isApproved = status === 'APPROVED';
+            const isRejected = status === 'REJECTED';
+            const isPending = status === 'PENDING';
+            const isFinal = isApproved || isRejected;
+            
+            return `
+                <div class="timeline">
+                    <div class="timeline-step completed">
+                        <div class="timeline-dot"><i data-lucide="check" style="width: 14px; height: 14px;"></i></div>
+                        <div class="timeline-label">Submitted</div>
+                        <div class="timeline-date"></div>
+                    </div>
+                    <div class="timeline-step ${isFinal ? 'completed' : 'active'}">
+                        <div class="timeline-dot">
+                            ${isFinal 
+                                ? '<i data-lucide="check" style="width: 14px; height: 14px;"></i>' 
+                                : '<i data-lucide="clock" style="width: 14px; height: 14px;"></i>'}
+                        </div>
+                        <div class="timeline-label">Under Review</div>
+                        <div class="timeline-date"></div>
+                    </div>
+                    <div class="timeline-step ${isApproved ? 'completed' : isRejected ? 'rejected' : ''}">
+                        <div class="timeline-dot">
+                            ${isApproved 
+                                ? '<i data-lucide="check" style="width: 14px; height: 14px;"></i>' 
+                                : isRejected 
+                                    ? '<i data-lucide="x" style="width: 14px; height: 14px;"></i>' 
+                                    : ''}
+                        </div>
+                        <div class="timeline-label">${isApproved ? 'Approved' : isRejected ? 'Rejected' : 'Decision'}</div>
+                        <div class="timeline-date"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function filterTable() {
+            const searchTerm = document.getElementById('search_input').value.toLowerCase();
+            const statusFilter = document.getElementById('status_filter').value;
+            const deptFilter = document.getElementById('dept_filter') ? document.getElementById('dept_filter').value : 'ALL';
+            const tbody = document.getElementById('table_body');
+            
+            let filtered = allRequests.filter(req => {
+                if (currentUser.role !== 'manager' && req.employee_id !== currentUser.id) return false;
+                const matchesSearch = req.reason.toLowerCase().includes(searchTerm) || req.id.toString().includes(searchTerm) || req.employee_id.toString().includes(searchTerm) || (req.employee_name && req.employee_name.toLowerCase().includes(searchTerm));
+                const matchesStatus = statusFilter === 'ALL' || req.status === statusFilter;
+                const empDept = getEmployeeDept(req.employee_id);
+                const matchesDept = deptFilter === 'ALL' || empDept === deptFilter;
+                return matchesSearch && matchesStatus && matchesDept;
+            });
+
+            filtered.sort((a, b) => b.id - a.id);
+            tbody.innerHTML = '';
+            
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i data-lucide="inbox" style="margin: 0 auto 0.5rem auto; display: block; opacity: 0.5;"></i>No requests match your filters.</div></td></tr>`;
+            } else {
+                filtered.forEach(req => {
+                    let startDisplay = req.start_date + (req.half_day_start ? ' <span style="color:var(--text-muted);font-size:0.75rem;">(0.5)</span>' : '');
+                    let endDisplay = req.end_date + (req.half_day_end ? ' <span style="color:var(--text-muted);font-size:0.75rem;">(0.5)</span>' : '');
+                    let statusBadge = `<span class="badge badge-${req.status.toLowerCase()}"><i data-lucide="${req.status === 'APPROVED'?'check':req.status==='REJECTED'?'x':'clock'}" style="width:12px;height:12px;"></i> ${req.status}</span>`;
+
+                    let slipBtn = req.status === 'APPROVED' 
+                        ? `<button class="btn btn-outline" style="height:26px; padding:0 8px; font-size:11px; gap:4px;" onclick="event.stopPropagation(); printApprovalSlip(${req.id})"><i data-lucide="printer" style="width:12px;height:12px;"></i> Slip</button>`
+                        : '<span style="color:var(--text-muted); font-size:11px;">N/A</span>';
+
+                    tbody.innerHTML += `
+                        <tr class="clickable-row" onclick="toggleTracker(${req.id})">
+                            <td>#${req.id}</td>
+                            <td>${req.employee_name}</td>
+                            <td class="date-col">${startDisplay} &rarr; ${endDisplay} (${req.duration} days)</td>
+                            <td>${req.reason}</td>
+                            <td>${statusBadge}</td>
+                            <td>${slipBtn}</td>
+                        </tr>
+                        <tr class="tracker-row" id="tracker_${req.id}">
+                            <td colspan="5">
+                                <div class="tracker-container">
+                                    ${renderStatusTracker(req.status)}
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            lucide.createIcons();
+        }
+        // ================= STARTUP =================
+        window.onload = async () => {
+            lucide.createIcons();
+            const savedId = localStorage.getItem('entLeaveAppUserId');
+            if (savedId) {
+                try {
+                    currentUser = await fetchUser(savedId);
+                    initDashboard();
+                } catch (e) {
+                    console.log('Saved user session expired or user not in database:', e);
+                    localStorage.removeItem('entLeaveAppUserId');
+                    currentUser = null;
+                    document.getElementById('dashboard_page').style.display = 'none';
+                    document.getElementById('auth_page').style.display = 'flex';
+                }
+            } else {
+                document.getElementById('dashboard_page').style.display = 'none';
+                document.getElementById('auth_page').style.display = 'flex';
+            }
+        };
+    </script>
+</body>
+</html>

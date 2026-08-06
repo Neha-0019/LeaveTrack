@@ -1,0 +1,19 @@
+{
+  "name": "leavetrack",
+  "version": "1.0.0",
+  "description": "LeaveTrack is an enterprise-grade Leave Approval System built with Flask and SQLite. It provides a clean API and a modern web interface for employees to submit leave requests and for managers to approve or reject them.",
+  "main": "temp.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "jsdom": "^29.1.1"
+  }
+}

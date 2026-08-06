@@ -1,0 +1,26 @@
+# Security Audit Review - LeaveTrack Leave Approval System
+
+## 1. Input Validation
+The application performs explicit input validation on incoming payloads to ensure safety against basic malformed data attacks:
+- **Type Checking:** Strict type checking ensures `name` and `role` are strings, and `half_day_start`/`half_day_end` are booleans, rejecting improper types.
+- **Value Constraints:** Employee roles are strictly restricted to `['employee', 'manager']`. Dates are parsed with `datetime.strptime` to guarantee valid `YYYY-MM-DD` string inputs. `leave_balance` cannot be negative.
+- **Database Safety:** All SQLite database queries use parameterized queries (e.g., `WHERE id = ?`), effectively mitigating SQL injection vulnerabilities across all endpoints.
+
+## 2. Authentication Mechanism
+An API key token mechanism secures sensitive endpoints (approval/rejection).
+- At creation time (`POST /employees`), a 16-byte secure random hexadecimal token is generated using the `secrets` module and stored against the Employee record.
+- Any request to `/leaves/<id>/approve` or `/leaves/<id>/reject` requires two headers: `Manager-Id` and `Authorization`.
+- The system verifies that the `Authorization` header exactly matches the stored token for the provided `Manager-Id`. If missing or mismatched, a `401 Unauthorized` response is returned. Self-approval is also structurally blocked.
+
+## 3. Git Secrets Check
+I confirmed that no sensitive files (`.env`, `.db`, or explicit secrets) are committed to the git repository.
+**Command run to verify this:**
+`git ls-files | Select-String "\.env|\.db|secret"`
+**Result:** No output (clean).
+
+## 4. Known Limitations (Explicitly Accepted for this Assessment)
+- **Demo Token Disclosure:** The three seeded demo accounts (Alice, Bob, Charlie) have hardcoded, predictable tokens visible directly in the `app.py` source code, which is an accepted risk solely for local testing and demo purposes (real employees created via the API receive proper, cryptographically secure `secrets.token_hex` tokens).
+- **Plaintext Token Storage:** API tokens are currently stored in plaintext in the database. In a true production environment, these should be hashed (e.g., using bcrypt or SHA-256).
+- **Transport Security:** The Flask application runs over HTTP locally. A real deployment must enforce HTTPS/TLS to prevent interception of the Authorization tokens in transit.
+- **No Token Rotation:** There is currently no API endpoint to rotate or revoke an API token if it is compromised.
+- **Stateless/No Session Management:** The frontend relies on passing the token it receives during registration. A production SaaS would typically use JWTs or secure session cookies instead of passing persistent DB tokens.
