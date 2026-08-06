@@ -13,3 +13,5 @@
 ## Iteration 2
 **Goal:** Add 3 specific tests for half-day leaves (overlap, deduction to 19.5, invalid single day) and run `run_loop.py`.
 **Result:** Passed perfectly on the first try. The Python overlap logic successfully isolates non-overlapping half-days on the exact same date.
+
+
