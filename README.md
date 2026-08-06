@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
 > **Live Deployment:** [https://leavetrack-10ut.onrender.com](https://leavetrack-10ut.onrender.com)  
-> **Engineering Assessment:** AI-Powered QA Automation, Documentation & Software Engineering Assessment | Tactive
+> **Enterprise Application:** Production-Ready Workplace Leave & Attendance Management System
 
 ---
 
@@ -124,5 +124,5 @@ python -m pytest test_leave_workflow.py -v
 
 ## 📄 License & Attribution
 
-Designed and developed by **Neha Panbude** for the **Tactive AI-Powered QA & Software Engineering Assessment**.  
+Designed and developed by **Neha Panbude**.  
 Released under the [MIT License](LICENSE).
