@@ -67,8 +67,19 @@ def init_db():
     cursor.execute('SELECT COUNT(*) FROM Employee')
     if cursor.fetchone()[0] == 0:
         cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Alice Manager', 'manager', 20.0, 'demo-token-alice'))
-        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Bob Employee', 'employee', 20.0, 'demo-token-bob'))
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Bob Employee', 'employee', 18.0, 'demo-token-bob'))
         cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Charlie Employee', 'employee', 20.0, 'demo-token-charlie'))
+        
+        # Populate initial sample leave requests so calendar, tracker, & requests tables are rich with data
+        cursor.execute('''
+            INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
+            VALUES (?, ?, ?, ?, 'APPROVED', 0, 0)
+        ''', (2, '2026-08-10', '2026-08-12', '[Casual Leave] Family Vacation'))
+
+        cursor.execute('''
+            INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
+            VALUES (?, ?, ?, ?, 'PENDING', 0, 0)
+        ''', (2, '2026-08-24', '2026-08-25', '[Sick Leave] Medical Appointment'))
         
     db.commit()
 
