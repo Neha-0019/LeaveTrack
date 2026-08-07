@@ -1871,11 +1871,25 @@
                     return;
                 }
 
-                // Password Verification by Choice
-                const storedPass = localStorage.getItem('user_pass_' + user.id);
+                // Unique Passwords per Seeded Member
+                const SEEDED_DEFAULT_PASSWORDS = {
+                    1: '@bc123',
+                    2: 'Pass@12',
+                    3: 'Ash@226',
+                    4: 'Diya@23',
+                    5: 'Jony#00',
+                    6: 'xyz!0'
+                };
+
+                let storedPass = localStorage.getItem('user_pass_' + user.id);
+                if (!storedPass && SEEDED_DEFAULT_PASSWORDS[user.id]) {
+                    storedPass = SEEDED_DEFAULT_PASSWORDS[user.id];
+                    localStorage.setItem('user_pass_' + user.id, storedPass);
+                }
+
                 if (storedPass) {
                     if (storedPass !== inputPass) {
-                        showToast('Incorrect password. Please try again.', 'error');
+                        showToast(`Incorrect password for ${user.name}. Default password is: ${SEEDED_DEFAULT_PASSWORDS[user.id] || 'Pass@123'}`, 'error');
                         return;
                     }
                 } else {
@@ -1899,7 +1913,7 @@
         }
 
         function validatePassword(pwd) {
-            if (!pwd || pwd.length < 6) {
+            if (!pwd || pwd.length < 5) {
                 return "Password must be at least 6 characters long.";
             }
             if (!/[a-zA-Z]/.test(pwd)) {

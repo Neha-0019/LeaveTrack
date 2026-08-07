@@ -66,20 +66,31 @@ def init_db():
     # Auto-initialize default accounts so MG001 and EMP002 work out-of-the-box
     cursor.execute('SELECT COUNT(*) FROM Employee')
     if cursor.fetchone()[0] == 0:
-        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Alice Manager', 'manager', 20.0, 'demo-token-alice'))
-        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Bob Employee', 'employee', 18.0, 'demo-token-bob'))
-        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Charlie Employee', 'employee', 20.0, 'demo-token-charlie'))
+        # Seed all accounts matching screenshot dataset
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Alice Manager', 'manager', 20.0, 'demo-token-alice')) # MG001
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Bob', 'employee', 17.0, 'demo-token-bob'))           # EMP002
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Charlie', 'employee', 15.0, 'demo-token-charlie'))   # EMP003
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Diana', 'employee', 18.0, 'demo-token-diana'))     # EMP004
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Jony', 'employee', 15.0, 'demo-token-jony'))        # EMP005
+        cursor.execute('INSERT INTO Employee (name, role, leave_balance, token) VALUES (?, ?, ?, ?)', ('Asha', 'employee', 14.0, 'demo-token-asha'))        # EMP006
         
-        # Populate initial sample leave requests so calendar, tracker, & requests tables are rich with data
-        cursor.execute('''
-            INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
-            VALUES (?, ?, ?, ?, 'APPROVED', 0, 0)
-        ''', (2, '2026-08-10', '2026-08-12', '[Casual Leave] Family Vacation'))
+        # Seed full leave schedule matching calendar screenshots (August & September 2026)
+        sample_requests = [
+            (2, '2026-08-10', '2026-08-12', '[Casual Leave] Family Annual Reunion', 'APPROVED', 0, 0),
+            (2, '2026-08-24', '2026-08-25', '[Sick Leave] Dental Surgery & Recovery', 'PENDING', 0, 0),
+            (6, '2026-08-14', '2026-08-21', '[Earned Leave] Personal Work & Travel', 'PENDING', 0, 0),
+            (4, '2026-08-18', '2026-08-19', '[Sick Leave] High Fever & Medical Rest', 'APPROVED', 0, 0),
+            (5, '2026-08-31', '2026-09-05', '[Casual Leave] Family Vacation', 'PENDING', 0, 0),
+            (3, '2026-09-01', '2026-09-07', '[Earned Leave] Summer Vacation in Switzerland', 'APPROVED', 0, 0),
+            (3, '2026-09-15', '2026-09-16', '[Casual Leave] Personal Home Renovation', 'PENDING', 0, 0),
+            (4, '2026-09-21', '2026-09-22', '[Others] Attending Industry Conference', 'PENDING', 0, 0)
+        ]
 
-        cursor.execute('''
-            INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
-            VALUES (?, ?, ?, ?, 'PENDING', 0, 0)
-        ''', (2, '2026-08-24', '2026-08-25', '[Sick Leave] Medical Appointment'))
+        for req in sample_requests:
+            cursor.execute('''
+                INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', req)
         
     db.commit()
 
