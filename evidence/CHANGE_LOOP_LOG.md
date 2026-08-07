@@ -58,3 +58,5 @@
 
 ## 🎯 Verification & Sign-Off
 All code modifications were validated using automated Pytest execution (`python -m pytest test_leave_workflow.py -v`). Full run outputs logged in `evidence/green_run_1.txt` and deliberate error logs in `evidence/red_run.txt`.
+
+<!-- Subfile Evidence Sync -->
