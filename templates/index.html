@@ -42,6 +42,7 @@
             --radius-pill: 9999px;
             
             --input-height: 40px;
+            --calendar-picker-filter: none;
         }
 
         /* Authentic Obsidian Dark Theme (Linear/Vercel SaaS Quality) */
@@ -60,6 +61,7 @@
             --status-approved-bg: rgba(16, 185, 129, 0.12);
             --status-rejected: #F43F5E;
             --status-rejected-bg: rgba(244, 63, 94, 0.12);
+            --calendar-picker-filter: invert(0.9) sepia(100%) saturate(1000%) hue-rotate(5deg);
         }
 
         [data-theme="dark"] .navbar {
@@ -155,7 +157,7 @@
         }
         select option { background: var(--card-bg); color: var(--primary-text); }
         input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184, 134, 46, 0.15); }
-        ::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.5; transition: 0.2s; }
+        ::-webkit-calendar-picker-indicator { cursor: pointer; opacity: 0.9; transition: 0.2s; filter: var(--calendar-picker-filter); }
         ::-webkit-calendar-picker-indicator:hover { opacity: 0.8; }
 
         /* Custom Toggle Switch */
