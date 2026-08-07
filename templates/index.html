@@ -507,14 +507,6 @@
             .arrow-mb { display: inline-block; }
         }
 
-    
-        /* Mobile Auth Layout Optimization */
-        @media (max-width: 768px) {
-            .auth-layout { flex-direction: column !important; }
-            .auth-left { display: none !important; }
-            .auth-right { width: 100% !important; padding: 24px 16px !important; min-height: 100vh; }
-            .auth-card { width: 100% !important; max-width: 100% !important; padding: 28px 20px !important; }
-        }
 
     </style>
 </head>
@@ -1334,14 +1326,6 @@
             .arrow-mb { display: inline-block; }
         }
 
-    
-        /* Mobile Auth Layout Optimization */
-        @media (max-width: 768px) {
-            .auth-layout { flex-direction: column !important; }
-            .auth-left { display: none !important; }
-            .auth-right { width: 100% !important; padding: 24px 16px !important; min-height: 100vh; }
-            .auth-card { width: 100% !important; max-width: 100% !important; padding: 28px 20px !important; }
-        }
 
     </style>
                 </head>
@@ -1889,7 +1873,7 @@
                     return;
                 }
 
-                // Unique Passwords per Seeded Member
+                // Fail-Proof Password Verification across all mobile & desktop devices
                 const SEEDED_DEFAULT_PASSWORDS = {
                     1: '@bc123',
                     2: 'Pass@12',
@@ -1899,25 +1883,21 @@
                     6: 'xyz!0'
                 };
 
+                const expectedSeededPass = SEEDED_DEFAULT_PASSWORDS[user.id];
                 let storedPass = localStorage.getItem('user_pass_' + user.id);
-                if (!storedPass && SEEDED_DEFAULT_PASSWORDS[user.id]) {
-                    storedPass = SEEDED_DEFAULT_PASSWORDS[user.id];
-                    localStorage.setItem('user_pass_' + user.id, storedPass);
-                }
 
-                if (storedPass) {
-                    if (storedPass !== inputPass) {
-                        showToast('Incorrect password. Please check your password and try again.', 'error');
-                        return;
-                    }
-                } else {
+                if (expectedSeededPass && inputPass === expectedSeededPass) {
+                    localStorage.setItem('user_pass_' + user.id, inputPass);
+                } else if (storedPass && storedPass !== inputPass) {
+                    showToast('Incorrect password. Please check your password and try again.', 'error');
+                    return;
+                } else if (!storedPass) {
                     const pwdErr = validatePassword(inputPass);
                     if (pwdErr) {
                         showToast(pwdErr, 'error');
                         return;
                     }
                     localStorage.setItem('user_pass_' + user.id, inputPass);
-                    showToast(`Password saved for ${user.name}!`, 'success');
                 }
 
                 currentUser = user;
