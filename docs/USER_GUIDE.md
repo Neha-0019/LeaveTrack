@@ -6,19 +6,6 @@
 
 ---
 
-## 🔑 Evaluator Test Credentials
-
-| Role & Name | User ID | Department | Evaluator Demo Password |
-|-------------|---------|------------|------------------------|
-| **Manager Alice** | `MG001` | Human Resources | `@bc123` |
-| **Employee Bob** | `EMP002` | Engineering | `Pass@12` |
-| **Employee Charlie** | `EMP003` | Product | `Ash@226` |
-| **Employee Diana** | `EMP004` | Marketing | `Diya@23` |
-| **Employee Jony** | `EMP005` | Sales | `Jony#00` |
-| **Employee Asha** | `EMP006` | Engineering | `xyz!0` |
-
----
-
 ## 🚀 How to Use LeaveTrack (5-Step Core Workflow)
 
 ### 1️⃣ Step 1: Sign In

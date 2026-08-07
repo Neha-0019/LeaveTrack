@@ -1873,25 +1873,14 @@
                     return;
                 }
 
-                // Fail-Proof Password Verification across all mobile & desktop devices
-                const SEEDED_DEFAULT_PASSWORDS = {
-                    1: '@bc123',
-                    2: 'Pass@12',
-                    3: 'Ash@226',
-                    4: 'Diya@23',
-                    5: 'Jony#00',
-                    6: 'xyz!0'
-                };
-
-                const expectedSeededPass = SEEDED_DEFAULT_PASSWORDS[user.id];
+                // Clean Standard Password Verification
                 let storedPass = localStorage.getItem('user_pass_' + user.id);
-
-                if (expectedSeededPass && inputPass === expectedSeededPass) {
-                    localStorage.setItem('user_pass_' + user.id, inputPass);
-                } else if (storedPass && storedPass !== inputPass) {
-                    showToast('Incorrect password. Please check your password and try again.', 'error');
-                    return;
-                } else if (!storedPass) {
+                if (storedPass) {
+                    if (storedPass !== inputPass) {
+                        showToast('Incorrect password. Please check your credentials and try again.', 'error');
+                        return;
+                    }
+                } else {
                     const pwdErr = validatePassword(inputPass);
                     if (pwdErr) {
                         showToast(pwdErr, 'error');

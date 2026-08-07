@@ -52,7 +52,7 @@
 
 ### Loop 6: Mobile Phone Touch Navigation & Fail-Proof Authentication
 * **User Directive:** Ensure smooth login and touch navigation on mobile smartphones.
-* **AI Action:** Updated `.nav-links` CSS with `-webkit-overflow-scrolling: touch; overflow-x: auto`. Enhanced password verification logic to validate official member passwords (`@bc123`, `Pass@12`, `Ash@226`, `Diya@23`, `Jony#00`, `xyz!0`) across devices.
+* **AI Action:** Updated `.nav-links` CSS with `-webkit-overflow-scrolling: touch; overflow-x: auto`. Enhanced password verification logic to validate official member passwords (`[Password Protected]`, `[Password Protected]`, `[Password Protected]`, `[Password Protected]`, `[Password Protected]`, `[Password Protected]`) across devices.
 
 ---
 

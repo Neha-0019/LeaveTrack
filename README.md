@@ -66,19 +66,6 @@
 
 ---
 
-## 🔐 Evaluator Demo Credentials
-
-| User ID | Member Name | Role | Department | Default Password | Initial Balance |
-|---------|-------------|------|------------|------------------|-----------------|
-| **`MG001`** | Alice Manager | Manager | Human Resources | **`@bc123`** | 20.0 days |
-| **`EMP002`** | Bob | Employee | Engineering | **`Pass@12`** | 17.0 days |
-| **`EMP003`** | Charlie | Employee | Product | **`Ash@226`** | 15.0 days |
-| **`EMP004`** | Diana | Employee | Marketing | **`Diya@23`** | 18.0 days |
-| **`EMP005`** | Jony | Employee | Sales | **`Jony#00`** | 15.0 days |
-| **`EMP006`** | Asha | Employee | Engineering | **`xyz!0`** | 14.0 days |
-
----
-
 ## 🚀 Quick Start Guide (Local Setup & Run)
 
 ### 1. Clone Repository & Install Dependencies:
