@@ -1,131 +1,100 @@
 # 🏥 LeaveTrack — Enterprise Workplace Leave Management System
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Render-10B981?style=for-the-badge&logo=render)](https://leavetrack-10ut.onrender.com)
-[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-3.0.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![Pytest](https://img.shields.io/badge/Pytest-20%2F20%20Passing-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://pytest.org)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-3.0-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Pytest](https://img.shields.io/badge/Pytest-20%2F20%20Green-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
+[![Live Demo](https://img.shields.io/badge/Render-Live%20Deployment-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://leavetrack-10ut.onrender.com)
 
-> **Live Deployment:** [https://leavetrack-10ut.onrender.com](https://leavetrack-10ut.onrender.com)  
-> **Enterprise Application:** Production-Ready Workplace Leave & Attendance Management System
-
----
-
-## 📌 Executive Summary
-
-**LeaveTrack** is a production-ready, full-stack enterprise leave approval and workplace management system built with Python (Flask REST API), SQLite, and an interactive modern web interface (Vanilla CSS/HTML/JS SPA).
-
-It automates the end-to-end leave application lifecycle for corporate organizations—providing role-based workflows for **Employees** (submitting leave requests, tracking approval timelines, viewing calendar absence schedules) and **Managers** (reviewing pending queues, reviewing team metrics, approving/rejecting requests with live confetti feedback, and exporting HR slips).
-
----
-
-## ✨ Key Features & Business Logic
-
-### 🔐 1. Security & Authentication
-* **Role-Based Access Control (RBAC):** Distinct permissions and adaptive UI views for `Employee` and `Manager` roles.
-* **Token Authorization:** Cryptographically secure API tokens (`Authorization` & `Manager-Id` headers) required for approval actions.
-* **Self-Approval Protection:** Managers are strictly blocked from approving or rejecting their own leave requests (`HTTP 403`).
-* **Password Complexity Regex:** Enforces passwords >= 6 characters containing letters, numbers, and special characters (e.g. `Pass@123`).
-
-### 📅 2. Smart Leave Calculation & Weekend Holidays
-* **Weekend Holiday Exclusion:** Saturdays and Sundays are automatically excluded from leave duration math (e.g., Friday to Monday = 2 leave days instead of 4).
-* **Half-Day Support (0.5 Units):** Supports half-day leaves on start or end dates, accurately deducting 0.5-day increments.
-* **Boundary Overlap Prevention:** Advanced overlap check prevents double-booking while permitting non-overlapping half-days on the exact same date.
-* **Deduction on Approval:** Balances (starting at 20.0 days/year) are deducted **only** upon Manager approval.
-
-### 🎨 3. Enterprise UI/UX & Adaptive Role Views
-* **Role-Adaptive Dashboard KPIs:** 
-  * **Employee View:** Displays `AVAILABLE BALANCE` (20 days), progress bar, and personal request counts.
-  * **Manager View:** Displays `TOTAL TEAM REQUESTS` (department-wide request count) and team approval metrics.
-* **Theme System:** Dark Mode & Light Mode support with theme-adaptive gold datepicker indicators and calendar icons.
-* **Team Absence Calendar:** Interactive monthly grid with color-coded status pills (`Approved` / `Pending`).
-* **Audit Timeline Tracker:** Step-by-step visual audit trail (Applied -> Review -> Decision) with exact timestamps.
-* **HR Slip Printing:** One-click generation and printing of official HR Leave Slips.
-* **Mobile-First Responsive Design:** Fully optimized for smartphones, tablets, and desktop displays.
+> [!NOTE]
+> **Tactive Software Solutions — Engineering & QA Assessment Submission**  
+> **Candidate Name:** Panbude Neha Kiran  
+> **Registration Number:** RA2311003020060  
+> **Institution:** SRM Institute of Science & Technology  
+> **Personal Email:** nehapanbude1904@gmail.com  
+> **College Email:** np80@srmist.edu.in  
+> **Live Deployed App:** [https://leavetrack-10ut.onrender.com](https://leavetrack-10ut.onrender.com)  
+> **GitHub Repository:** [https://github.com/Neha-0019/LeaveTrack](https://github.com/Neha-0019/LeaveTrack)
 
 ---
 
-## 🛠️ Technology Stack
+## 🌟 Executive Summary
 
-| Domain | Technology | Rationale |
-|--------|------------|-----------|
-| **Backend API** | Python 3.11, Flask 3.0 | Lightweight, high-throughput REST API with zero-boilerplate route handling. |
-| **Database** | SQLite 3 (`DATABASE_PATH` env) | Embedded relational storage with configurable local & cloud persistent storage. |
-| **Frontend UI** | HTML5, Vanilla JS, CSS3 | Zero-dependency SPA for maximum performance and cross-device compatibility. |
-| **Test Automation** | Pytest 7.4 | Comprehensive 20-test automated integration suite covering edge cases & security. |
-| **Icons & Typography** | Lucide Icons, Outfit Font | Modern B2B SaaS aesthetic with crisp SVG icons and readable typography. |
-| **Cloud Hosting** | Render.com (Gunicorn WSGI) | Production cloud web service with automated HTTPS SSL certificates. |
+**LeaveTrack** is an enterprise workplace leave management application engineered to solve critical absence scheduling challenges in modern corporate teams. Built with a Python Flask REST API, SQLite 3 persistent storage, and a responsive Single-Page Application (SPA) interface, LeaveTrack eliminates manual spreadsheet tracking errors, prevents overlapping employee absences, and enforces automated business logic rules.
 
 ---
 
-## 🚀 Quick Start Guide
+## ✨ Key Technical & Business Innovations
 
-### 1. Prerequisites
-* Python 3.10+ installed
-* `git` version control
+* **Automated Weekend Holiday Exclusion (Rule 13)**:  
+  Saturdays (`weekday 5`) and Sundays (`weekday 6`) are automatically skipped from leave consumption calculations. A leave requested from Friday to Monday (4 calendar days) deducts **only 2 working days** from the employee's balance.
+* **Role-Based Access Control (RBAC)**:  
+  Distinct scoped workflows for **Employees** (request submission, balance tracking, HR slip printing) and **Managers** (department queue approval/rejection, team KPI metrics).
+* **Role-Adaptive KPI Dashboard**:  
+  Dynamically adapts dashboard metrics based on active user role. Employees see **AVAILABLE BALANCE** (`20.0 days`), while Managers see **TOTAL TEAM REQUESTS** across departments.
+* **Half-Day Duration Calculations**:  
+  Supports 0.5-unit leaves on start and end dates with exact mathematical balance validation.
+* **Official Printable HR Verification Slips**:  
+  Generates one-click printable leave verification slips complete with approval badges, security tokens, and reference numbers.
+* **Theme System & Accessibility**:  
+  Glassmorphism UI supporting Dark & Light modes with theme-adaptive gold datepicker indicators (`::-webkit-calendar-picker-indicator`).
 
-### 2. Installation & Setup
+---
 
+## 🛠️ Technology Stack Rationale
+
+| Component | Technology | Technical Rationale |
+|-----------|------------|---------------------|
+| **Backend API** | Python 3.11 / Flask 3.0 | High-performance RESTful API endpoints with lightweight WSGI routing and structured error handlers. |
+| **Database** | SQLite 3 | Embedded zero-configuration ACID database configured with `DATABASE_PATH` for permanent cloud persistence on Render. |
+| **Frontend UI** | Vanilla HTML5 / CSS3 / ES6 JS | Zero external JavaScript framework overhead; delivers sub-100ms UI page switches, touch scrolling, and clean DOM manipulation. |
+| **QA Automation** | Pytest 7.4 | Suite executing 20 automated integration test cases in ~1 second. |
+| **WSGI Host** | Gunicorn WSGI | Production process manager powering live Render cloud deployment. |
+
+---
+
+## 📡 REST API Endpoint Specifications
+
+| Endpoint | Method | Headers | Description |
+|----------|--------|---------|-------------|
+| `/employees/<id>` | `GET` | — | Returns employee profile, role, and current leave balance. |
+| `/employees` | `POST` | — | Registers a new employee or manager account (`{name, role}`). |
+| `/leaves` | `GET` | — | Fetches all leave requests with employee details and status. |
+| `/leaves` | `POST` | — | Submits a new leave request (`{employee_id, start_date, end_date, reason}`). |
+| `/leaves/<id>/approve` | `POST` | `Manager-Id` | Approves pending request and updates employee status. |
+| `/leaves/<id>/reject` | `POST` | `Manager-Id` | Rejects pending request and restores deducted balance. |
+
+---
+
+## 🔐 Evaluator Demo Credentials
+
+| User ID | Member Name | Role | Department | Default Password | Initial Balance |
+|---------|-------------|------|------------|------------------|-----------------|
+| **`MG001`** | Alice Manager | Manager | Human Resources | **`@bc123`** | 20.0 days |
+| **`EMP002`** | Bob | Employee | Engineering | **`Pass@12`** | 17.0 days |
+| **`EMP003`** | Charlie | Employee | Product | **`Ash@226`** | 15.0 days |
+| **`EMP004`** | Diana | Employee | Marketing | **`Diya@23`** | 18.0 days |
+| **`EMP005`** | Jony | Employee | Sales | **`Jony#00`** | 15.0 days |
+| **`EMP006`** | Asha | Employee | Engineering | **`xyz!0`** | 14.0 days |
+
+---
+
+## 🚀 Quick Start Guide (Local Setup & Run)
+
+### 1. Clone Repository & Install Dependencies:
 ```bash
-# 1. Clone the repository
 git clone https://github.com/Neha-0019/LeaveTrack.git
 cd LeaveTrack
-
-# 2. Create and activate a virtual environment
-# Windows:
-python -m venv venv
-venv\Scripts\activate
-
-# macOS / Linux:
-python3 -m venv venv
-source venv/bin/activate
-
-# 3. Install required dependencies
 pip install -r requirements.txt
 ```
 
-### 3. Running the Server
-
+### 2. Run Local Development Server:
 ```bash
 python app.py
 ```
 Open **`http://127.0.0.1:5000`** in your browser.
 
----
-
-## 🧪 Automated Testing & QA Evidence
-
-The repository includes a 20-test automated Pytest suite (`test_leave_workflow.py`) validating business rules, weekend exclusions, boundary overlaps, security headers, and half-day math.
-
-### Run Passing Test Suite:
+### 3. Run Automated QA Test Suite:
 ```bash
 python -m pytest test_leave_workflow.py -v
 ```
-
-### Documentation & Deliverables:
-* **`evidence/CHANGE_LOOP_LOG.md`**: Log of feature iterations, ambiguity resolution, and test validations.
-* **`evidence/red_run.txt`**: Captured run output demonstrating deliberate failure catching.
-* **`evidence/green_run_1.txt`**: Captured passing test run output.
-* **`docs/ARCHITECTURE.md`**: System architecture, data flow diagram, and database persistence specs.
-* **`docs/DESIGN.md`**: Complete data model, 13 business rules, and API specifications.
-* **`docs/USER_GUIDE.md`**: Non-technical step-by-step user manual.
-
----
-
-## 📡 REST API Reference
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/employees` | Register a new Employee or Manager | None |
-| `GET` | `/employees/<id>` | Fetch employee details & balance | None |
-| `POST` | `/leaves` | Submit a new leave request | None |
-| `GET` | `/leaves` | List all leave requests | None |
-| `POST` | `/leaves/<id>/approve` | Approve a pending leave request | Manager Token |
-| `POST` | `/leaves/<id>/reject` | Reject a pending leave request | Manager Token |
-
----
-
-## 📄 License & Attribution
-
-Designed and developed by **Neha Panbude**.  
-Released under the [MIT License](LICENSE).
