@@ -75,3 +75,22 @@ Open **`http://127.0.0.1:5000`** in your browser.
 ```bash
 python -m pytest test_leave_workflow.py -v
 ```
+
+---
+
+## 📸 Application Interface Showcase & Screenshots
+
+### 1️⃣ Sign In & Workspace Access
+![Sign In & Authentication Screen](docs/screenshots/signin_screen.png)
+
+### 2️⃣ Role-Adaptive Manager Dashboard (Alice Manager — `MG001`)
+![Manager Dashboard](docs/screenshots/manager_dashboard.png)
+
+### 3️⃣ Employee Overview & Leave Request Form (Bob Employee — `EMP002`)
+![Employee Dashboard & Request Form](docs/screenshots/employee_dashboard.png)
+
+### 4️⃣ Manager Approval Queue & Team Scheduled Absences
+![Manager Approval Queue](docs/screenshots/approval_queue.png)
+
+### 5️⃣ Recent Requests Table & Printable HR Slips
+![Recent Requests Table](docs/screenshots/requests_table.png)
