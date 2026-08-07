@@ -676,13 +676,13 @@
                 <!-- Signature Element -->
                 <div class="card kpi-card balance-focal">
                     <div class="kpi-header" style="margin-bottom: 0;">
-                        <span class="kpi-label">Available Balance</span>
+                        <span class="kpi-label" id="kpi_balance_label">Available Balance</span>
                     </div>
                     <div style="display: flex; align-items: baseline; gap: 8px;">
                         <div class="kpi-value" id="kpi_balance">--</div>
-                        <span style="color: var(--text-muted); font-weight: 500; font-size: 14px;">days</span>
+                        <span id="kpi_balance_unit" style="color: var(--text-muted); font-weight: 500; font-size: 14px;">days</span>
                     </div>
-                    <div class="balance-track-container">
+                    <div class="balance-track-container" id="balance_progress_container">
                         <div class="balance-track-labels">
                             <span id="balance_used_label">0 used</span>
                             <span>20 total</span>
@@ -2065,17 +2065,19 @@
                     if (r.status === 'REJECTED') rejectedCount++;
                 });
 
-                if (isManager) {
-                    document.getElementById('kpi_balance_label').innerText = 'TOTAL TEAM REQUESTS';
-                    document.getElementById('kpi_balance').innerText = allRequests.length;
-                    if (document.getElementById('kpi_balance_unit')) document.getElementById('kpi_balance_unit').innerText = 'submitted';
-                    if (document.getElementById('balance_progress_container')) document.getElementById('balance_progress_container').style.display = 'none';
-                } else {
-                    document.getElementById('kpi_balance_label').innerText = 'AVAILABLE BALANCE';
-                    document.getElementById('kpi_balance').innerText = currentUser.leave_balance;
-                    if (document.getElementById('kpi_balance_unit')) document.getElementById('kpi_balance_unit').innerText = 'days';
-                    if (document.getElementById('balance_progress_container')) document.getElementById('balance_progress_container').style.display = 'block';
-                    
+                const labelEl = document.getElementById('kpi_balance_label');
+                if (labelEl) labelEl.innerText = isManager ? 'TOTAL TEAM REQUESTS' : 'AVAILABLE BALANCE';
+
+                const valEl = document.getElementById('kpi_balance');
+                if (valEl) valEl.innerText = isManager ? allRequests.length : currentUser.leave_balance;
+
+                const unitEl = document.getElementById('kpi_balance_unit');
+                if (unitEl) unitEl.innerText = isManager ? 'submitted' : 'days';
+
+                const containerEl = document.getElementById('balance_progress_container');
+                if (containerEl) containerEl.style.display = isManager ? 'none' : 'block';
+
+                if (!isManager) {
                     const totalDays = 20;
                     const usedDays = totalDays - currentUser.leave_balance;
                     const usedPercent = Math.max(0, Math.min(100, (usedDays / totalDays) * 100));
