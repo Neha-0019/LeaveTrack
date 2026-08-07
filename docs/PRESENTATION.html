@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeaveTrack — Presentation Deck</title>
+    <title>LeaveTrack — Presentation Deck (Neha Panbude)</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Outfit', sans-serif; background: #0B0D12; color: #F1F5F9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .slide-container { width: 100%; max-width: 900px; height: 520px; background: #141720; border: 1px solid #212635; border-radius: 16px; padding: 48px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; }
+        .slide-container { width: 100%; max-width: 950px; height: 550px; background: #141720; border: 1px solid #212635; border-radius: 16px; padding: 48px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; }
         .slide { display: none; height: 100%; flex-direction: column; justify-content: space-between; }
         .slide.active { display: flex; }
         .badge { display: inline-block; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
-        h1 { font-size: 32px; font-weight: 800; color: #FFFFFF; margin-bottom: 12px; line-height: 1.2; }
-        h2 { font-size: 24px; font-weight: 700; color: #F59E0B; margin-bottom: 16px; }
-        p { font-size: 16px; color: #94A3B8; line-height: 1.6; margin-bottom: 16px; }
-        ul { list-style: none; margin-top: 12px; }
-        ul li { font-size: 15px; color: #CBD5E1; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        h1 { font-size: 28px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; line-height: 1.2; }
+        h2 { font-size: 22px; font-weight: 700; color: #F59E0B; margin-bottom: 14px; }
+        p { font-size: 15px; color: #94A3B8; line-height: 1.5; margin-bottom: 14px; }
+        ul { list-style: none; margin-top: 8px; }
+        ul li { font-size: 14px; color: #CBD5E1; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         ul li::before { content: "✓"; color: #10B981; font-weight: bold; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: #0E1017; border: 1px solid #212635; padding: 20px; border-radius: 12px; }
-        .card h3 { font-size: 16px; color: #FFFFFF; margin-bottom: 8px; }
-        .card p { font-size: 13px; color: #94A3B8; margin: 0; }
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin-top: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .card { background: #0E1017; border: 1px solid #212635; padding: 16px; border-radius: 12px; }
+        .card h3 { font-size: 15px; color: #F59E0B; margin-bottom: 6px; }
+        .card p { font-size: 13px; color: #E2E8F0; margin: 0; line-height: 1.4; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 950px; margin-top: 20px; }
         .btn { background: #F59E0B; color: #000; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .btn:hover { background: #D97706; }
         .btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -35,17 +35,24 @@
         <!-- Slide 1 -->
         <div class="slide active">
             <div>
-                <span class="badge">Presentation Deck</span>
+                <span class="badge">Official Presentation Deck</span>
                 <h1>LeaveTrack — Enterprise Workplace Leave Management System</h1>
-                <p>Production-ready REST API, SQLite storage, role-based workflows, and automated QA suite.</p>
-                <div class="grid-2" style="margin-top: 24px;">
+                <p>Engineering Assessment & Full-Stack Deliverable built for Tactive Software Solutions.</p>
+                
+                <div class="grid-2" style="margin-top: 16px;">
                     <div class="card">
-                        <h3>Author</h3>
-                        <p>Neha Panbude</p>
+                        <h3>🎓 Candidate Information</h3>
+                        <p><strong>Name:</strong> Panbude Neha Kiran</p>
+                        <p><strong>Reg No:</strong> RA2311003020060</p>
+                        <p><strong>Personal Email:</strong> nehapanbude1904@gmail.com</p>
+                        <p><strong>College Email:</strong> np80@srmist.edu.in</p>
+                        <p><strong>Institution:</strong> SRM Institute of Science & Technology</p>
                     </div>
                     <div class="card">
-                        <h3>Live Deployment</h3>
-                        <p>https://leavetrack-10ut.onrender.com</p>
+                        <h3>🌐 Live Application Access</h3>
+                        <p><strong>Live Web & Mobile URL:</strong><br><a href="https://leavetrack-10ut.onrender.com" target="_blank" style="color: #3B82F6;">https://leavetrack-10ut.onrender.com</a></p>
+                        <p style="margin-top: 6px;"><strong>Workability:</strong> Fully responsive on Mobile Smartphones & Desktop Web Browsers.</p>
+                        <p><strong>GitHub Repo:</strong><br><a href="https://github.com/Neha-0019/LeaveTrack" target="_blank" style="color: #3B82F6;">https://github.com/Neha-0019/LeaveTrack</a></p>
                     </div>
                 </div>
             </div>
@@ -54,39 +61,42 @@
         <!-- Slide 2 -->
         <div class="slide">
             <div>
-                <span class="badge">Problem & Architecture</span>
-                <h2>The Business Problem & Technology Stack</h2>
-                <p>Corporate leave tracking often suffers from manual overlap errors, unverified balance calculations, and complex approval bottlenecks.</p>
-                <ul>
-                    <li><strong>Backend API:</strong> Python 3.11 & Flask 3.0 REST API.</li>
-                    <li><strong>Database:</strong> SQLite 3 with persistent disk support (`DATABASE_PATH`).</li>
-                    <li><strong>Frontend:</strong> Modern Vanilla HTML5/CSS/JS Single-Page Application.</li>
-                    <li><strong>Security:</strong> 16-byte token authorization, RBAC, and password complexity regex.</li>
-                </ul>
+                <span class="badge">Architecture & System Design</span>
+                <h2>Problem Statement & Technology Stack</h2>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>❌ Business Problem</h3>
+                        <p>Manual leave spreadsheets cause overlap conflicts, unverified balances, & incorrect weekend deductions.</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚡ Tech Stack</h3>
+                        <p>• Backend: Python 3.11 & Flask REST API<br>• Database: SQLite 3 with persistent disk support (`DATABASE_PATH`)<br>• Frontend: Modern Vanilla JS Single-Page Application (SPA)</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Slide 3 -->
         <div class="slide">
             <div>
-                <span class="badge">Core Innovations</span>
-                <h2>Key Business Logic & Features</h2>
+                <span class="badge">Business Logic & Rules</span>
+                <h2>Core Innovations & Feature Rules</h2>
                 <div class="grid-2">
                     <div class="card">
-                        <h3>Weekend Holiday Exclusions</h3>
-                        <p>Saturdays and Sundays are automatically excluded from leave duration calculations (e.g. Fri-Mon = 2 days).</p>
+                        <h3>Weekend Holiday Exclusions (Rule 13)</h3>
+                        <p>Saturdays & Sundays are automatically excluded from leave duration math (Fri-Mon = 2 working days).</p>
                     </div>
                     <div class="card">
-                        <h3>Half-Day Leave Math</h3>
-                        <p>Supports 0.5-unit leaves on start and end dates with exact balance deduction.</p>
+                        <h3>Half-Day Leave Duration</h3>
+                        <p>Supports 0.5-unit start & end date calculations with exact balance deduction.</p>
                     </div>
                     <div class="card">
-                        <h3>Role-Adaptive Dashboard</h3>
-                        <p>Employees see Available Balance; Managers see Total Team Requests.</p>
+                        <h3>Role-Adaptive Manager KPIs</h3>
+                        <p>Employees view AVAILABLE BALANCE; Managers view TOTAL TEAM REQUESTS across departments.</p>
                     </div>
                     <div class="card">
-                        <h3>Printable HR Slips</h3>
-                        <p>One-click PDF/Printer slip generation with reference codes & manager approval stamps.</p>
+                        <h3>Official HR Leave Slips</h3>
+                        <p>One-click printable leave verification slips with security tokens & manager approval badges.</p>
                     </div>
                 </div>
             </div>
@@ -95,13 +105,12 @@
         <!-- Slide 4 -->
         <div class="slide">
             <div>
-                <span class="badge">AI Change Loop</span>
-                <h2>Automated Engineering & Test Orchestration</h2>
-                <p>Demonstrating closed AI change loop with automated test validations.</p>
+                <span class="badge">QA & AI Engineering</span>
+                <h2>AI Change Loop & Automated Test Verification</h2>
                 <ul>
-                    <li><strong>Pytest Test Suite:</strong> 20/20 passing integration tests covering business rules & security.</li>
-                    <li><strong>Deliberate Red Run:</strong> Captured run output (`evidence/red_run.txt`) proving failure detection.</li>
-                    <li><strong>Evidence Log:</strong> Detailed record in `evidence/CHANGE_LOOP_LOG.md`.</li>
+                    <li><strong>Pytest Integration Suite:</strong> 20/20 passing tests covering RBAC, balance limits, & weekend exclusions.</li>
+                    <li><strong>Deliberate Red Run Capture:</strong> Logged intentional failure capture in `evidence/red_run.txt`.</li>
+                    <li><strong>Evidence Logging:</strong> Complete engineering change log in `evidence/CHANGE_LOOP_LOG.md`.</li>
                 </ul>
             </div>
         </div>
@@ -109,14 +118,16 @@
         <!-- Slide 5 -->
         <div class="slide">
             <div>
-                <span class="badge">Summary</span>
-                <h2>Conclusion & Live Access</h2>
-                <p>LeaveTrack delivers a high-quality, fully testable, and secure enterprise workplace leave solution.</p>
-                <ul>
-                    <li><strong>GitHub Repo:</strong> https://github.com/Neha-0019/LeaveTrack</li>
-                    <li><strong>Live Demo:</strong> https://leavetrack-10ut.onrender.com</li>
-                    <li><strong>Default Credentials:</strong> Manager `MG001` (`@bc123`) & Employee `EMP002` (`Pass@12`)</li>
-                </ul>
+                <span class="badge">Live Demo Credentials</span>
+                <h2>Workable Member Credentials</h2>
+                <div class="card">
+                    <p>• <strong>Manager Alice (MG001):</strong> Password <code>@bc123</code> (Human Resources)</p>
+                    <p>• <strong>Employee Bob (EMP002):</strong> Password <code>Pass@12</code> (Engineering)</p>
+                    <p>• <strong>Employee Charlie (EMP003):</strong> Password <code>Ash@226</code> (Product)</p>
+                    <p>• <strong>Employee Diana (EMP004):</strong> Password <code>Diya@23</code> (Marketing)</p>
+                    <p>• <strong>Employee Jony (EMP005):</strong> Password <code>Jony#00</code> (Sales)</p>
+                    <p>• <strong>Employee Asha (EMP006):</strong> Password <code>xyz!0</code> (Engineering)</p>
+                </div>
             </div>
         </div>
     </div>
