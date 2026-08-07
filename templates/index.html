@@ -507,6 +507,15 @@
             .arrow-mb { display: inline-block; }
         }
 
+    
+        /* Mobile Auth Layout Optimization */
+        @media (max-width: 768px) {
+            .auth-layout { flex-direction: column !important; }
+            .auth-left { display: none !important; }
+            .auth-right { width: 100% !important; padding: 24px 16px !important; min-height: 100vh; }
+            .auth-card { width: 100% !important; max-width: 100% !important; padding: 28px 20px !important; }
+        }
+
     </style>
 </head>
 <body>
@@ -1325,6 +1334,15 @@
             .arrow-mb { display: inline-block; }
         }
 
+    
+        /* Mobile Auth Layout Optimization */
+        @media (max-width: 768px) {
+            .auth-layout { flex-direction: column !important; }
+            .auth-left { display: none !important; }
+            .auth-right { width: 100% !important; padding: 24px 16px !important; min-height: 100vh; }
+            .auth-card { width: 100% !important; max-width: 100% !important; padding: 28px 20px !important; }
+        }
+
     </style>
                 </head>
                 <body>
@@ -1889,7 +1907,7 @@
 
                 if (storedPass) {
                     if (storedPass !== inputPass) {
-                        showToast(`Incorrect password for ${user.name}. Default password is: ${SEEDED_DEFAULT_PASSWORDS[user.id] || 'Pass@123'}`, 'error');
+                        showToast('Incorrect password. Please check your password and try again.', 'error');
                         return;
                     }
                 } else {
