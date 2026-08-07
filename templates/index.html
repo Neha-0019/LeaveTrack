@@ -206,7 +206,8 @@
         }
         .nav-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .nav-brand { display: flex; align-items: center; gap: var(--sp-1); font-weight: 600; font-size: 16px; color: var(--primary-text); }
-        .nav-links { display: flex; gap: var(--sp-3); align-items: center; height: 100%; }
+        .nav-links { display: flex; gap: var(--sp-2); align-items: center; height: 100%; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
         .nav-link { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.15s; display: flex; align-items: center; gap: var(--sp-1); cursor: pointer; height: 64px; border-bottom: 2px solid transparent;}
         .nav-link:hover { color: var(--primary-text); }
         .nav-link.active { color: var(--primary-text); border-bottom-color: var(--accent); }
@@ -2231,7 +2232,9 @@
             const queueContainer = document.getElementById('manager_queue_container');
             const queueContent = document.getElementById('manager_queue_content');
             
-            if (currentUser.role !== 'manager') {
+            if (!queueContainer || !queueContent) return;
+
+            if (!currentUser || currentUser.role !== 'manager') {
                 queueContainer.style.display = 'none';
                 return;
             }
