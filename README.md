@@ -94,3 +94,7 @@ python -m pytest test_leave_workflow.py -v
 
 ### 5️⃣ Recent Requests Table & Printable HR Slips
 ![Recent Requests Table](docs/screenshots/requests_table.png)
+
+
+### 6️⃣ Audit Timeline & Decision Tracker
+![Leave Application & Decision Tracker](docs/screenshots/decision_tracker.png)
