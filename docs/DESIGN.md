@@ -2,7 +2,7 @@
 
 > [!IMPORTANT]
 > Detailed Data Models, Business Rules, and API Specifications for **LeaveTrack**.  
-> Candidate: **Panbude Neha Kiran** | Reg No: **RA2311003020060** | **SRMIST**
+> 
 
 ---
 

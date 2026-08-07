@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > Step-by-step user manual for **LeaveTrack (Tactive Workplace Management)**.  
-> Candidate: **Panbude Neha Kiran** | Reg No: **RA2311003020060** | **SRM Institute of Science & Technology**
+> 
 
 ---
 

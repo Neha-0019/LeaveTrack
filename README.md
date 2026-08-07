@@ -6,17 +6,7 @@
 [![Pytest](https://img.shields.io/badge/Pytest-20%2F20%20Green-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white)](https://docs.pytest.org/)
 [![Live Demo](https://img.shields.io/badge/Render-Live%20Deployment-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://leavetrack-10ut.onrender.com)
 
-> [!NOTE]
-> **Tactive Software Solutions — Engineering & QA Assessment Submission**  
-> **Candidate Name:** Panbude Neha Kiran  
-> **Registration Number:** RA2311003020060  
-> **Institution:** SRM Institute of Science & Technology  
-> **Personal Email:** nehapanbude1904@gmail.com  
-> **College Email:** np80@srmist.edu.in  
-> **Live Deployed App:** [https://leavetrack-10ut.onrender.com](https://leavetrack-10ut.onrender.com)  
-> **GitHub Repository:** [https://github.com/Neha-0019/LeaveTrack](https://github.com/Neha-0019/LeaveTrack)
 
----
 
 ## 🌟 Executive Summary
 
