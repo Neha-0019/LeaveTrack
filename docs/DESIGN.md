@@ -1,58 +1,69 @@
-# LeaveTrack Design Document
+# 🎨 LeaveTrack — Technical Design Document & Business Rules
 
-## Data Model
+> [!IMPORTANT]
+> Detailed Data Models, Business Rules, and API Specifications for **LeaveTrack**.  
+> Candidate: **Panbude Neha Kiran** | Reg No: **RA2311003020060** | **SRMIST**
 
-### Employee
-- `id` (INTEGER, Primary Key)
-- `name` (TEXT)
-- `role` (TEXT: 'employee', 'manager')
-- `leave_balance` (REAL, default 20.0)
-- `token` (TEXT) - Cryptographically generated 16-byte hex API token for authentication.
+---
 
-### LeaveRequest
-- `id` (INTEGER, Primary Key)
-- `employee_id` (INTEGER, Foreign Key -> Employee.id)
-- `start_date` (TEXT, YYYY-MM-DD)
-- `end_date` (TEXT, YYYY-MM-DD)
-- `reason` (TEXT)
-- `status` (TEXT: 'PENDING', 'APPROVED', 'REJECTED')
-- `half_day_start` (BOOLEAN, default 0)
-- `half_day_end` (BOOLEAN, default 0)
+## 🗄️ Database Schema & Data Models
 
-## Business Rules & Key Flows
-1. **Initial Balance:** An employee starts with a balance of 20.0 days.
-2. **Required Fields:** Requests must include `employee_id`, `start_date`, `end_date`, and `reason`.
-3. **Chronology:** `end_date` cannot be before `start_date`.
-4. **No Past Dates:** A leave cannot be requested for a date range ending entirely in the past.
-5. **Balance Ceiling:** An employee cannot request more working days than their remaining balance.
-6. **No Overlaps:** Employees cannot have overlapping `PENDING` or `APPROVED` requests. Half-day requests on the exact same date for opposite halves are isolated and do not count as an overlap.
-7. **Workflow State:** Requests default to `PENDING`.
-8. **Deduction Timing:** Balances are deducted only upon `APPROVAL`, never upon request creation.
-9. **State Lock:** Processed requests (`APPROVED` or `REJECTED`) are final and cannot be modified.
-10. **Authorization Enforcement:** Only users with the `'manager'` role can approve or reject requests. They must provide a valid `Authorization` header matching their stored token.
-11. **Self-Approval Block:** A manager cannot approve or reject their own leave requests.
-12. **Half-Day Logic:** A leave can be modified by `half_day_start` and `half_day_end`. Single-day leaves cannot have both flags set to True simultaneously.
-13. **Weekend Holiday Exclusion:** Saturdays and Sundays are excluded from duration math (e.g. Friday to Monday counts as 2 working days).
+### 1. `Employee` Table Schema
+```sql
+CREATE TABLE Employee (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    role TEXT NOT NULL CHECK(role IN ('employee', 'manager')),
+    leave_balance REAL DEFAULT 20.0,
+    token TEXT UNIQUE
+);
+```
 
-## API Specification
-- `POST /employees`: 
-  - Payload: `{"name": "...", "role": "..."}`
-  - Responses: `201 Created` (returns generated token), `400 Bad Request` (invalid types/missing data).
-- `GET /employees/<id>`:
-  - Responses: `200 OK`, `404 Not Found`.
-- `POST /leaves`:
-  - Payload: `{"employee_id": int, "start_date": "YYYY-MM-DD", "end_date": "YYYY-MM-DD", "reason": "str", "half_day_start": bool, "half_day_end": bool}`
-  - Responses: `201 Created`, `400 Bad Request` (overlaps, invalid dates, insufficient balance), `404 Not Found`.
-- `POST /leaves/<id>/approve`:
-  - Headers: `Manager-Id: int`, `Authorization: str`
-  - Responses: `200 OK`, `401 Unauthorized`, `403 Forbidden`, `404 Not Found`, `400 Bad Request`.
-- `POST /leaves/<id>/reject`:
-  - Headers: `Manager-Id: int`, `Authorization: str`
-  - Responses: Same as approve.
-- `GET /leaves`:
-  - Responses: `200 OK` (list of all requests).
+### 2. `LeaveRequest` Table Schema
+```sql
+CREATE TABLE LeaveRequest (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    employee_id INTEGER NOT NULL,
+    start_date TEXT NOT NULL,
+    end_date TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    status TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING', 'APPROVED', 'REJECTED')),
+    half_day_start BOOLEAN DEFAULT 0,
+    half_day_end BOOLEAN DEFAULT 0,
+    FOREIGN KEY(employee_id) REFERENCES Employee(id)
+);
+```
 
-## Error Handling
-- Invalid Input: Returns HTTP `400 Bad Request` with an explicit JSON `error` message detailing the specific validation that failed.
-- Unauthorized/Forbidden Access: Returns HTTP `401 Unauthorized` for missing headers/invalid tokens, or `403 Forbidden` for role/self-approval violations.
-- Double-Processing: Attempting to approve/reject an already processed request yields a `400 Bad Request` state lock error.
+---
+
+## ⚖️ Core Business Rules (Rules 1 to 13)
+
+> [!TIP]
+> **Rule 13 (Weekend Holiday Exclusion)** automatically skips Saturdays and Sundays from leave duration math.
+
+1. **Rule 1 (Initial Balance)**: Every employee starts with a 20.0 days annual leave balance.
+2. **Rule 2 (Required Fields)**: Requests must contain `employee_id`, `start_date`, `end_date`, and `reason`.
+3. **Rule 3 (Date Ordering)**: `start_date` must be on or before `end_date`.
+4. **Rule 4 (Balance Deduction)**: Balance is deducted only upon submission.
+5. **Rule 5 (Overlap Rejection)**: Overlapping leave date ranges for the same employee are rejected.
+6. **Rule 6 (Manager Workflow)**: Managers approve or reject pending requests.
+7. **Rule 7 (Rejection Restoration)**: Rejecting a request restores the deducted leave balance.
+8. **Rule 8 (Insufficient Balance)**: Requests exceeding available balance return `400 Bad Request`.
+9. **Rule 9 (Half-Day Support)**: Half-day options deduct 0.5 days per half-day flag.
+10. **Rule 10 (Role-Based Authorization)**: Only managers can execute approval/rejection endpoints.
+11. **Rule 11 (Audit Timeline)**: Status changes update request state and audit history.
+12. **Rule 12 (Printable Slips)**: Approved leaves generate a printable verification slip with reference tokens.
+13. **Rule 13 (Weekend Exclusions)**: Saturdays (`weekday 5`) and Sundays (`weekday 6`) contribute **0 days** to leave consumption (e.g. Friday to Monday deducts only 2 working days).
+
+---
+
+## 📡 REST API Endpoint Specifications
+
+| Endpoint | Method | Headers | Request Body | Description |
+|----------|--------|---------|--------------|-------------|
+| `/employees/<id>` | `GET` | — | — | Returns employee profile and current leave balance. |
+| `/employees` | `POST` | — | `{name, role}` | Creates a new employee or manager account. |
+| `/leaves` | `GET` | — | — | Returns all leave requests with employee details. |
+| `/leaves` | `POST` | — | `{employee_id, start_date, end_date, reason, half_day_start, half_day_end}` | Submits a new leave request. |
+| `/leaves/<id>/approve` | `POST` | `Manager-Id` | — | Approves pending request and updates status. |
+| `/leaves/<id>/reject` | `POST` | `Manager-Id` | — | Rejects pending request and restores balance. |

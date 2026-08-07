@@ -7,25 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Outfit', sans-serif; background: #0B0D12; color: #F1F5F9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        .slide-container { width: 100%; max-width: 950px; height: 550px; background: #141720; border: 1px solid #212635; border-radius: 16px; padding: 48px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: flex; flex-direction: column; justify-content: space-between; }
+        body { font-family: 'Outfit', sans-serif; background: #0A0E17; color: #F1F5F9; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        .slide-container { width: 100%; max-width: 980px; height: 560px; background: #121826; border: 1px solid #212D45; border-radius: 18px; padding: 44px; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); display: flex; flex-direction: column; justify-content: space-between; }
         .slide { display: none; height: 100%; flex-direction: column; justify-content: space-between; }
         .slide.active { display: flex; }
-        .badge { display: inline-block; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
-        h1 { font-size: 28px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; line-height: 1.2; }
+        .badge { display: inline-block; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+        h1 { font-size: 28px; font-weight: 800; color: #FFFFFF; margin-bottom: 8px; line-height: 1.25; }
         h2 { font-size: 22px; font-weight: 700; color: #F59E0B; margin-bottom: 14px; }
         p { font-size: 15px; color: #94A3B8; line-height: 1.5; margin-bottom: 14px; }
         ul { list-style: none; margin-top: 8px; }
-        ul li { font-size: 14px; color: #CBD5E1; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        ul li::before { content: "✓"; color: #10B981; font-weight: bold; }
+        ul li { font-size: 14px; color: #CBD5E1; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        ul li::before { content: "✓"; color: #10B981; font-weight: bold; font-size: 16px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .card { background: #0E1017; border: 1px solid #212635; padding: 16px; border-radius: 12px; }
-        .card h3 { font-size: 15px; color: #F59E0B; margin-bottom: 6px; }
-        .card p { font-size: 13px; color: #E2E8F0; margin: 0; line-height: 1.4; }
-        .nav-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 950px; margin-top: 20px; }
-        .btn { background: #F59E0B; color: #000; border: none; padding: 10px 20px; font-weight: 700; font-size: 14px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .btn:hover { background: #D97706; }
-        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .card { background: #0E131F; border: 1px solid #212D45; padding: 18px; border-radius: 14px; }
+        .card h3 { font-size: 15px; color: #F59E0B; margin-bottom: 8px; font-weight: 700; }
+        .card p { font-size: 13px; color: #E2E8F0; margin: 0; line-height: 1.5; }
+        .nav-bar { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 980px; margin-top: 20px; }
+        .btn { background: #F59E0B; color: #000; border: none; padding: 12px 24px; font-weight: 700; font-size: 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
+        .btn:hover { background: #D97706; transform: translateY(-1px); }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
         .counter { font-size: 14px; color: #64748B; font-weight: 600; }
     </style>
 </head>
@@ -37,7 +37,7 @@
             <div>
                 <span class="badge">Official Presentation Deck</span>
                 <h1>LeaveTrack — Enterprise Workplace Leave Management System</h1>
-                <p>Engineering Assessment & Full-Stack Deliverable built for Tactive Software Solutions.</p>
+                <p>Engineering Assessment & Full-Stack Deliverable for Tactive Software Solutions.</p>
                 
                 <div class="grid-2" style="margin-top: 16px;">
                     <div class="card">
@@ -49,10 +49,10 @@
                         <p><strong>Institution:</strong> SRM Institute of Science & Technology</p>
                     </div>
                     <div class="card">
-                        <h3>🌐 Live Application Access</h3>
-                        <p><strong>Live Web & Mobile URL:</strong><br><a href="https://leavetrack-10ut.onrender.com" target="_blank" style="color: #3B82F6;">https://leavetrack-10ut.onrender.com</a></p>
-                        <p style="margin-top: 6px;"><strong>Workability:</strong> Fully responsive on Mobile Smartphones & Desktop Web Browsers.</p>
-                        <p><strong>GitHub Repo:</strong><br><a href="https://github.com/Neha-0019/LeaveTrack" target="_blank" style="color: #3B82F6;">https://github.com/Neha-0019/LeaveTrack</a></p>
+                        <h3>🌐 Live Production Deployment</h3>
+                        <p><strong>Live URL:</strong> <a href="https://leavetrack-10ut.onrender.com" target="_blank" style="color: #3B82F6; text-decoration: none; font-weight: 600;">https://leavetrack-10ut.onrender.com</a></p>
+                        <p style="margin-top: 6px;"><strong>Responsiveness:</strong> Fully workable on Mobile Smartphones & Desktop Web Browsers.</p>
+                        <p><strong>GitHub Repo:</strong> <a href="https://github.com/Neha-0019/LeaveTrack" target="_blank" style="color: #3B82F6; text-decoration: none; font-weight: 600;">https://github.com/Neha-0019/LeaveTrack</a></p>
                     </div>
                 </div>
             </div>
@@ -66,10 +66,10 @@
                 <div class="grid-2">
                     <div class="card">
                         <h3>❌ Business Problem</h3>
-                        <p>Manual leave spreadsheets cause overlap conflicts, unverified balances, & incorrect weekend deductions.</p>
+                        <p>Manual spreadsheets result in scheduling conflicts, unverified balances, & incorrect weekend holiday deductions.</p>
                     </div>
                     <div class="card">
-                        <h3>⚡ Tech Stack</h3>
+                        <h3>⚡ Technology Stack</h3>
                         <p>• Backend: Python 3.11 & Flask REST API<br>• Database: SQLite 3 with persistent disk support (`DATABASE_PATH`)<br>• Frontend: Modern Vanilla JS Single-Page Application (SPA)</p>
                     </div>
                 </div>
@@ -79,8 +79,8 @@
         <!-- Slide 3 -->
         <div class="slide">
             <div>
-                <span class="badge">Business Logic & Rules</span>
-                <h2>Core Innovations & Feature Rules</h2>
+                <span class="badge">Business Rules & Features</span>
+                <h2>Core Innovations & Enterprise Features</h2>
                 <div class="grid-2">
                     <div class="card">
                         <h3>Weekend Holiday Exclusions (Rule 13)</h3>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="card">
                         <h3>Half-Day Leave Duration</h3>
-                        <p>Supports 0.5-unit start & end date calculations with exact balance deduction.</p>
+                        <p>Supports 0.5-unit start & end date calculations with exact balance deduction math.</p>
                     </div>
                     <div class="card">
                         <h3>Role-Adaptive Manager KPIs</h3>
@@ -96,7 +96,7 @@
                     </div>
                     <div class="card">
                         <h3>Official HR Leave Slips</h3>
-                        <p>One-click printable leave verification slips with security tokens & manager approval badges.</p>
+                        <p>One-click printable leave verification slips with security tokens & manager approval stamps.</p>
                     </div>
                 </div>
             </div>
@@ -105,11 +105,11 @@
         <!-- Slide 4 -->
         <div class="slide">
             <div>
-                <span class="badge">QA & AI Engineering</span>
-                <h2>AI Change Loop & Automated Test Verification</h2>
+                <span class="badge">QA Automation & Testing</span>
+                <h2>AI Change Loop & Test Suite Evidence</h2>
                 <ul>
                     <li><strong>Pytest Integration Suite:</strong> 20/20 passing tests covering RBAC, balance limits, & weekend exclusions.</li>
-                    <li><strong>Deliberate Red Run Capture:</strong> Logged intentional failure capture in `evidence/red_run.txt`.</li>
+                    <li><strong>Deliberate Red Run Capture:</strong> Logged intentional failure output in `evidence/red_run.txt`.</li>
                     <li><strong>Evidence Logging:</strong> Complete engineering change log in `evidence/CHANGE_LOOP_LOG.md`.</li>
                 </ul>
             </div>
@@ -118,8 +118,8 @@
         <!-- Slide 5 -->
         <div class="slide">
             <div>
-                <span class="badge">Live Demo Credentials</span>
-                <h2>Workable Member Credentials</h2>
+                <span class="badge">Evaluator Live Credentials</span>
+                <h2>Workable Member Accounts & Passwords</h2>
                 <div class="card">
                     <p>• <strong>Manager Alice (MG001):</strong> Password <code>@bc123</code> (Human Resources)</p>
                     <p>• <strong>Employee Bob (EMP002):</strong> Password <code>Pass@12</code> (Engineering)</p>
@@ -154,6 +154,11 @@
             prevBtn.disabled = currentSlide === 0;
             nextBtn.disabled = currentSlide === slides.length - 1;
         }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) changeSlide(1);
+            if (e.key === 'ArrowLeft' && currentSlide > 0) changeSlide(-1);
+        });
     </script>
 </body>
 </html>

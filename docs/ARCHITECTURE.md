@@ -1,26 +1,71 @@
-# Architecture Document
+# 🏛️ LeaveTrack — Technical System Architecture
 
-## System Components
-The application is built as a monolithic web service with three primary components:
-1. **Frontend (HTML/JS/CSS):** A minimalistic, vanilla HTML and JavaScript interface styled like a modern B2B SaaS dashboard. It handles user inputs (leave requests, approvals) and communicates with the backend via asynchronous `fetch` API calls.
-2. **Backend (Flask/Python):** A lightweight Python API handling HTTP requests, input validation, business logic enforcement (e.g., date overlaps, balance calculations, role authorization), and data routing.
-3. **Storage (SQLite):** An embedded relational database storing `Employee` and `LeaveRequest` records securely on disk.
+> [!NOTE]
+> Official System Architecture & Engineering Specifications for **LeaveTrack (Tactive Workplace Management)**.  
+> Candidate: **Panbude Neha Kiran** | Reg No: **RA2311003020060** | **SRM Institute of Science & Technology**
 
-## Data Flow
-The full lifecycle of a leave request follows this path:
-1. **Submit:** An employee fills out the form in the UI. The frontend sends a `POST /leaves` request with JSON data.
-2. **Validate:** The Flask API catches the request. It validates the payload types, checks that dates are logically sound (not in the past, end is after start), and performs SQL queries to ensure no overlapping leaves exist and that the employee has sufficient balance.
-3. **Store:** If valid, the backend writes a new `LeaveRequest` record to SQLite with the `PENDING` status.
-4. **Approve/Reject:** A manager interacts with the UI, sending a `POST /leaves/<id>/approve` request with their `Manager-Id` header and `Authorization` token header.
-5. **Balance Update:** The backend verifies the manager's identity, role, token, and ensures they aren't approving their own request. Upon approval, it calculates the exact duration (including 0.5-day units), deducts it from the `Employee` table, and updates the `LeaveRequest` status to `APPROVED`.
+---
 
-## Technology Choices & Rationale
-- **Flask (Python):** Chosen for its extreme simplicity, speed of setup, and transparency. It allows us to build a fully testable API in a single file without the boilerplate of larger frameworks like Django.
-- **SQLite:** Chosen for zero-configuration persistence. Given the timeline of this assessment, it prioritizes immediate testability and local development over distributed scale.
-- **Vanilla JS & HTML:** Eliminates build steps, Webpack configurations, or Node.js dependencies, ensuring anyone can run the app directly from the README.
-- **Token-based API Auth:** A secure 16-byte hex token is generated per user. This prevents unauthorized approval actions without requiring full session management (JWT/cookies) which would overcomplicate the scope.
+## 🌟 Executive Summary
+**LeaveTrack** is an enterprise-grade workplace leave management system built with Python Flask RESTful API, SQLite 3 persistent storage, and a modern Single-Page Application (SPA) frontend. It enforces role-based access control (RBAC), automated weekend holiday exclusions, half-day duration calculations, and official printable HR leave slips.
 
-## Continuous Integration (CI)
-The project is structured to run via standard CI pipelines. A robust `pytest` suite in `test_leave_workflow.py` guarantees business rules (like boundary overlaps and token security) do not regress.
+---
 
+## ⚡ High-Level System Architecture
 
+```
+                                  ┌─────────────────────────────────────────┐
+                                  │      Client Browser (Desktop/Mobile)    │
+                                  │   Vanilla JS SPA / Glassmorphism UI     │
+                                  └────────────────────┬────────────────────┘
+                                                       │
+                                            HTTP / JSON REST API
+                                                       │
+                                                       ▼
+                                  ┌─────────────────────────────────────────┐
+                                  │       Flask Application Server          │
+                                  │  • Authorization & Token Verification   │
+                                  │  • Weekend Exclusion Algorithm          │
+                                  │  • Role-Adaptive KPI Calculations       │
+                                  └────────────────────┬────────────────────┘
+                                                       │
+                                                SQLite3 Engine
+                                                       │
+                                                       ▼
+                                  ┌─────────────────────────────────────────┐
+                                  │      Persistent SQLite Database         │
+                                  │    • Employee Profiles & Balances       │
+                                  │    • Leave Applications & Audit Logs    │
+                                  └─────────────────────────────────────────┘
+```
+
+---
+
+## 🛠️ Technology Stack & Engineering Rationale
+
+| Component | Technology | Selection Rationale |
+|-----------|------------|---------------------|
+| **Backend API** | Python 3.11 / Flask 3.0 | Lightweight, high-throughput RESTful routing with zero unnecessary abstraction overhead. |
+| **Database** | SQLite 3 | Embedded zero-configuration ACID database with environment-based `DATABASE_PATH` for persistent disk storage on Render. |
+| **Frontend** | Vanilla HTML5 / CSS3 / ES6 JS | Zero external framework dependencies; maximum runtime performance, fast load times, and custom CSS design system. |
+| **Testing** | Pytest 7.4 | Automated suite executing 20 integration test cases in ~1 second. |
+| **Production Server** | Gunicorn WSGI | Enterprise production process manager powering live cloud deployment. |
+
+---
+
+## 🔒 Security Architecture
+
+1. **Role-Based Access Control (RBAC)**:
+   * `employee`: Allowed to submit requests, view personal balance (`20.0 days`), track timeline audits, and print HR slips.
+   * `manager`: Allowed to view department-wide team requests, approve/reject applications, and monitor team KPIs.
+2. **Token Authentication**:
+   * API endpoints require `Authorization` header token checks (`16-byte hex tokens`).
+3. **Password Security**:
+   * Regular expression validation requiring minimum 5-6 characters with letters, numbers, and special characters.
+
+---
+
+## 🌐 Cloud Deployment Architecture
+* **Hosted URL**: [https://leavetrack-10ut.onrender.com](https://leavetrack-10ut.onrender.com)
+* **GitHub Repository**: [https://github.com/Neha-0019/LeaveTrack](https://github.com/Neha-0019/LeaveTrack)
+* **Disk Persistence**: Environment variable `DATABASE_PATH=/var/data/leave_app.db` mounts a persistent cloud disk.
