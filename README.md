@@ -15,14 +15,14 @@
 
 **LeaveTrack** is a production-ready, full-stack enterprise leave approval and workplace management system built with Python (Flask REST API), SQLite, and an interactive modern web interface (Vanilla CSS/HTML/JS SPA).
 
-It automates the end-to-end leave application lifecycle for corporate organizations—providing role-based workflows for **Employees** (submitting leave requests, tracking approval timelines, viewing calendar absence schedules) and **Managers** (reviewing pending queues, approving/rejecting requests with live confetti feedback, and exporting HR slips).
+It automates the end-to-end leave application lifecycle for corporate organizations—providing role-based workflows for **Employees** (submitting leave requests, tracking approval timelines, viewing calendar absence schedules) and **Managers** (reviewing pending queues, reviewing team metrics, approving/rejecting requests with live confetti feedback, and exporting HR slips).
 
 ---
 
 ## ✨ Key Features & Business Logic
 
 ### 🔐 1. Security & Authentication
-* **Role-Based Access Control (RBAC):** Distinct permissions and UI views for `Employee` and `Manager` roles.
+* **Role-Based Access Control (RBAC):** Distinct permissions and adaptive UI views for `Employee` and `Manager` roles.
 * **Token Authorization:** Cryptographically secure API tokens (`Authorization` & `Manager-Id` headers) required for approval actions.
 * **Self-Approval Protection:** Managers are strictly blocked from approving or rejecting their own leave requests (`HTTP 403`).
 * **Password Complexity Regex:** Enforces passwords >= 6 characters containing letters, numbers, and special characters (e.g. `Pass@123`).
@@ -33,8 +33,11 @@ It automates the end-to-end leave application lifecycle for corporate organizati
 * **Boundary Overlap Prevention:** Advanced overlap check prevents double-booking while permitting non-overlapping half-days on the exact same date.
 * **Deduction on Approval:** Balances (starting at 20.0 days/year) are deducted **only** upon Manager approval.
 
-### 🎨 3. Enterprise UI/UX & Mobile Responsiveness
-* **Theme System:** Dark Mode & Light Mode support with smooth CSS variable cascade.
+### 🎨 3. Enterprise UI/UX & Adaptive Role Views
+* **Role-Adaptive Dashboard KPIs:** 
+  * **Employee View:** Displays `AVAILABLE BALANCE` (20 days), progress bar, and personal request counts.
+  * **Manager View:** Displays `TOTAL TEAM REQUESTS` (department-wide request count) and team approval metrics.
+* **Theme System:** Dark Mode & Light Mode support with theme-adaptive gold datepicker indicators and calendar icons.
 * **Team Absence Calendar:** Interactive monthly grid with color-coded status pills (`Approved` / `Pending`).
 * **Audit Timeline Tracker:** Step-by-step visual audit trail (Applied -> Review -> Decision) with exact timestamps.
 * **HR Slip Printing:** One-click generation and printing of official HR Leave Slips.
@@ -47,7 +50,7 @@ It automates the end-to-end leave application lifecycle for corporate organizati
 | Domain | Technology | Rationale |
 |--------|------------|-----------|
 | **Backend API** | Python 3.11, Flask 3.0 | Lightweight, high-throughput REST API with zero-boilerplate route handling. |
-| **Database** | SQLite 3 | Embedded relational storage with foreign key constraints & atomic commits. |
+| **Database** | SQLite 3 (`DATABASE_PATH` env) | Embedded relational storage with configurable local & cloud persistent storage. |
 | **Frontend UI** | HTML5, Vanilla JS, CSS3 | Zero-dependency SPA for maximum performance and cross-device compatibility. |
 | **Test Automation** | Pytest 7.4 | Comprehensive 20-test automated integration suite covering edge cases & security. |
 | **Icons & Typography** | Lucide Icons, Outfit Font | Modern B2B SaaS aesthetic with crisp SVG icons and readable typography. |
@@ -92,19 +95,19 @@ Open **`http://127.0.0.1:5000`** in your browser.
 
 ## 🧪 Automated Testing & QA Evidence
 
-The repository includes a 20-test automated Pytest suite (`test_leave_workflow.py`) validating business rules, boundary overlaps, security headers, and half-day math.
+The repository includes a 20-test automated Pytest suite (`test_leave_workflow.py`) validating business rules, weekend exclusions, boundary overlaps, security headers, and half-day math.
 
 ### Run Passing Test Suite:
 ```bash
 python -m pytest test_leave_workflow.py -v
 ```
 
-### Assessment Evidence Deliverables:
-* **`evidence/CHANGE_LOOP_LOG.md`**: Full log of the AI change-loop implementation, ambiguity resolution, and test iterations.
-* **`evidence/red_run.txt`**: Captured run output demonstrating a deliberate red run failure catching breaking changes.
+### Documentation & Deliverables:
+* **`evidence/CHANGE_LOOP_LOG.md`**: Log of feature iterations, ambiguity resolution, and test validations.
+* **`evidence/red_run.txt`**: Captured run output demonstrating deliberate failure catching.
 * **`evidence/green_run_1.txt`**: Captured passing test run output.
-* **`docs/ARCHITECTURE.md`**: System architecture, data flow diagram, and component specs.
-* **`docs/DESIGN.md`**: Complete data model, 12 business rules, and API specifications.
+* **`docs/ARCHITECTURE.md`**: System architecture, data flow diagram, and database persistence specs.
+* **`docs/DESIGN.md`**: Complete data model, 13 business rules, and API specifications.
 * **`docs/USER_GUIDE.md`**: Non-technical step-by-step user manual.
 
 ---
