@@ -1649,17 +1649,26 @@
                 const startDisplay = r.start_date + (r.half_day_start ? ' (Half Day)' : '');
                 const endDisplay = r.end_date + (r.half_day_end ? ' (Half Day)' : '');
                 
-                // Audit timestamps
-                const appliedDate = new Date();
-                appliedDate.setDate(appliedDate.getDate() - Math.max(1, (allRequests.length - r.id + 1)));
-                const appliedFormatted = appliedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' at 09:30 AM';
+                // Audit timestamps in Indian Standard Time (IST)
+                const dateOptions = { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' };
+                const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' };
+
+                let appliedDate;
+                if (r.start_date) {
+                    const parts = r.start_date.split('-');
+                    appliedDate = new Date(parts[0], parts[1] - 1, parts[2], 10, 30);
+                } else {
+                    appliedDate = new Date();
+                }
+
+                const appliedFormatted = appliedDate.toLocaleDateString('en-IN', dateOptions) + ' at ' + appliedDate.toLocaleTimeString('en-IN', timeOptions) + ' (IST)';
                 
                 const isPending = r.status === 'PENDING';
                 const isApproved = r.status === 'APPROVED';
                 const isRejected = r.status === 'REJECTED';
                 
-                const decisionDate = new Date(appliedDate.getTime() + 1000 * 60 * 60 * 4);
-                const decisionFormatted = decisionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' at 01:45 PM';
+                const decisionDate = new Date(appliedDate.getTime() + (1000 * 60 * 60 * 2)); // 2 hours later
+                const decisionFormatted = decisionDate.toLocaleDateString('en-IN', dateOptions) + ' at ' + decisionDate.toLocaleTimeString('en-IN', timeOptions) + ' (IST)';
 
                 const statusBadge = `<span class="badge badge-${r.status.toLowerCase()}"><i data-lucide="${isApproved ? 'check' : isRejected ? 'x' : 'clock'}" style="width:12px;height:12px;"></i> ${r.status}</span>`;
                 const cardLeftBorder = isApproved ? '#10B981' : isRejected ? '#F43F5E' : 'var(--accent)';
