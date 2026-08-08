@@ -1653,11 +1653,18 @@
                 const dateOptions = { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' };
                 const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' };
 
-                // Audit timestamps starting sequentially from Aug 3, 2026 in Indian Standard Time (IST)
-                const baseAug3 = new Date(2026, 7, 3, 10, 30); // 3rd Aug 2026 at 10:30 AM
-                // Each request ID increments the applied date starting from Aug 3
-                const dayOffset = Math.min(r.id - 1, 5); 
-                const appliedDate = new Date(baseAug3.getTime() + (dayOffset * 24 * 60 * 60 * 1000));
+                // Real-time Audit Timestamps in Indian Standard Time (IST)
+                let appliedDate;
+                if (r.created_at) {
+                    // Parse real submission timestamp
+                    appliedDate = new Date(r.created_at.replace(' ', 'T'));
+                    if (isNaN(appliedDate.getTime())) appliedDate = new Date();
+                } else {
+                    // Fallback for seeded requests: Start from Aug 3, 2026
+                    const baseAug3 = new Date(2026, 7, 3, 10, 30);
+                    const dayOffset = Math.min(r.id - 1, 5);
+                    appliedDate = new Date(baseAug3.getTime() + (dayOffset * 24 * 60 * 60 * 1000));
+                }
 
                 const appliedFormatted = appliedDate.toLocaleDateString('en-IN', dateOptions) + ' at ' + appliedDate.toLocaleTimeString('en-IN', timeOptions) + ' (IST)';
                 

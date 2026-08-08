@@ -203,7 +203,10 @@ def test_half_day_overlap(client, employee):
 
 def test_half_day_deduction(client, employee, manager):
     """Half-day: Deducts exactly 0.5 from balance."""
-    future = (date.today() + timedelta(days=6)).strftime('%Y-%m-%d')
+    target_date = date.today() + timedelta(days=5)
+    while target_date.weekday() >= 5:
+        target_date += timedelta(days=1)
+    future = target_date.strftime('%Y-%m-%d')
     res = client.post('/leaves', json={
         'employee_id': employee['id'],
         'start_date': future,

@@ -59,6 +59,7 @@ def init_db():
             status TEXT DEFAULT 'PENDING',
             half_day_start BOOLEAN DEFAULT 0,
             half_day_end BOOLEAN DEFAULT 0,
+            created_at TEXT,
             FOREIGN KEY(employee_id) REFERENCES Employee(id)
         )
     ''')
@@ -243,10 +244,11 @@ def submit_leave():
     if has_overlap:
         return jsonify({'error': 'Overlapping pending or approved requests exist'}), 400
         
+    created_at_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     cursor.execute('''
-        INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end)
-        VALUES (?, ?, ?, ?, 'PENDING', ?, ?)
-    ''', (employee_id, start_date_str, end_date_str, reason, half_day_start, half_day_end))
+        INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end, created_at)
+        VALUES (?, ?, ?, ?, 'PENDING', ?, ?, ?)
+    ''', (employee_id, start_date_str, end_date_str, reason, int(half_day_start), int(half_day_end), created_at_now))
     db.commit()
     
     return jsonify({'id': cursor.lastrowid, 'status': 'PENDING'}), 201
@@ -282,7 +284,7 @@ def approve_leave(request_id):
         
     start_date = datetime.strptime(leave_req['start_date'], '%Y-%m-%d').date()
     end_date = datetime.strptime(leave_req['end_date'], '%Y-%m-%d').date()
-    days_requested = calculate_working_days(start_date, end_date, leave_req['half_day_start'], leave_req['half_day_end'])
+    days_requested = calculate_working_days(start_date, end_date, bool(leave_req['half_day_start']), bool(leave_req['half_day_end']))
     
     employee = get_employee(leave_req['employee_id'])
     
