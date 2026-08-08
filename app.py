@@ -244,11 +244,14 @@ def submit_leave():
     if has_overlap:
         return jsonify({'error': 'Overlapping pending or approved requests exist'}), 400
         
-    created_at_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    from datetime import timezone
+    client_created_at = data.get('created_at')
+    if not client_created_at:
+        client_created_at = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
     cursor.execute('''
         INSERT INTO LeaveRequest (employee_id, start_date, end_date, reason, status, half_day_start, half_day_end, created_at)
         VALUES (?, ?, ?, ?, 'PENDING', ?, ?, ?)
-    ''', (employee_id, start_date_str, end_date_str, reason, int(half_day_start), int(half_day_end), created_at_now))
+    ''', (employee_id, start_date_str, end_date_str, reason, int(half_day_start), int(half_day_end), client_created_at))
     db.commit()
     
     return jsonify({'id': cursor.lastrowid, 'status': 'PENDING'}), 201

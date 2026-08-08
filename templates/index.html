@@ -1656,8 +1656,10 @@
                 // Real-time Audit Timestamps in Indian Standard Time (IST)
                 let appliedDate;
                 if (r.created_at) {
-                    // Parse real submission timestamp
-                    appliedDate = new Date(r.created_at.replace(' ', 'T'));
+                    let isoStr = r.created_at;
+                    if (!isoStr.includes('T')) isoStr = isoStr.replace(' ', 'T');
+                    if (!isoStr.endsWith('Z') && !isoStr.includes('+')) isoStr += 'Z';
+                    appliedDate = new Date(isoStr);
                     if (isNaN(appliedDate.getTime())) appliedDate = new Date();
                 } else {
                     // Fallback for seeded requests: Start from Aug 3, 2026
@@ -2140,7 +2142,8 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         employee_id: currentUser.id, 
-                        start_date, end_date, reason, half_day_start, half_day_end
+                        start_date, end_date, reason, half_day_start, half_day_end,
+                        created_at: new Date().toISOString()
                     })
                 });
                 const data = await res.json();
