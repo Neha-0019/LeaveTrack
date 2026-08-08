@@ -83,7 +83,10 @@ def init_db():
             (5, '2026-08-31', '2026-09-05', '[Casual Leave] Family Vacation', 'PENDING', 0, 0),
             (3, '2026-09-01', '2026-09-07', '[Earned Leave] Summer Vacation in Switzerland', 'APPROVED', 0, 0),
             (3, '2026-09-15', '2026-09-16', '[Casual Leave] Personal Home Renovation', 'PENDING', 0, 0),
-            (4, '2026-09-21', '2026-09-22', '[Others] Attending Industry Conference', 'PENDING', 0, 0)
+            (4, '2026-09-21', '2026-09-22', '[Others] Attending Industry Conference', 'PENDING', 0, 0),
+            (2, '2026-08-27', '2026-08-28', '[Others] Personal problem', 'PENDING', 0, 0),
+            (2, '2026-08-13', '2026-08-13', '[Others] Personal problem', 'PENDING', 0, 0),
+            (2, '2026-09-03', '2026-09-04', '[Casual Leave] Family function', 'PENDING', 1, 0)
         ]
 
         for req in sample_requests:
